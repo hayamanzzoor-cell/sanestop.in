@@ -88,10 +88,10 @@
         </div>
     </div>
 
-    <!-- MAIN APP DASHBOARD (GIS LAYOUT) -->
+    <!-- MAIN APP DASHBOARD -->
     <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
         
-        <!-- TOP GIS NAVIGATION BAR (Like the reference image) -->
+        <!-- TOP GIS NAVIGATION BAR -->
         <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 flex items-center justify-between z-30 flex-shrink-0 shadow-sm">
             <div class="flex items-center space-x-3">
                 <button type="button" onclick="goBackToWelcome()" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">← Back</button>
@@ -101,7 +101,6 @@
                 </div>
             </div>
 
-            <!-- Top Search & Filters -->
             <div class="flex items-center space-x-3">
                 <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facilities..." class="hidden md:block bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-1.5 rounded-lg text-xs w-64 outline-none">
                 
@@ -121,22 +120,22 @@
         <div class="flex-1 relative">
             <div id="map" class="w-full h-full"></div>
 
-            <!-- FLOATING LAYER/CONTROL PANEL (Exact style reference from image) -->
+            <!-- FLOATING LAYER/CONTROL PANEL -->
             <div class="absolute top-4 left-4 z-20 w-80 max-h-[calc(100vh-6rem)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-card border border-slate-200 dark:border-slate-800 p-4 overflow-y-auto space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                     <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Layer & Actions</span>
-                    <button onclick="panToUserLocation()" class="text-[11px] font-bold text-teal-600 dark:text-teal-400 hover:underline">GPS Near Me</button>
+                    <button type="button" onclick="panToUserLocation()" class="text-[11px] font-bold text-teal-600 dark:text-teal-400 hover:underline">GPS Near Me</button>
                 </div>
 
                 <!-- Quick Filters -->
                 <div class="space-y-1.5">
                     <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter View</label>
                     <div class="grid grid-cols-2 gap-1.5">
-                        <button onclick="filterMarkers('all')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-teal-600 text-white shadow-sm" id="filterAll">All Services</button>
-                        <button onclick="filterMarkers('toilet')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterToilet">Toilets</button>
-                        <button onclick="filterMarkers('water')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterWater">Water Points</button>
-                        <button onclick="filterMarkers('free')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterFree">Free Only</button>
-                        <button onclick="filterMarkers('accessible')" class="filter-btn col-span-2 py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterAccessible">Wheelchair Accessible</button>
+                        <button type="button" onclick="filterMarkers('all')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-teal-600 text-white shadow-sm" id="filterAll">All Services</button>
+                        <button type="button" onclick="filterMarkers('toilet')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterToilet">Toilets</button>
+                        <button type="button" onclick="filterMarkers('water')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterWater">Water Points</button>
+                        <button type="button" onclick="filterMarkers('free')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterFree">Free Only</button>
+                        <button type="button" onclick="filterMarkers('accessible')" class="filter-btn col-span-2 py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterAccessible">Wheelchair Accessible</button>
                     </div>
                 </div>
 
@@ -173,7 +172,7 @@
                         <div id="imageFileName" class="text-[10px] text-teal-500 font-bold"></div>
 
                         <button type="submit" id="submitReportBtn" class="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm">
-                            Submit & Route to Local Body[cite: 1]
+                            Submit & Route to Local Body
                         </button>
                     </form>
                     <div id="reportSuccess" class="text-[11px] text-teal-600 font-bold text-center"></div>
@@ -183,7 +182,7 @@
 
                 <!-- Municipal Tickets Tracker -->
                 <div class="space-y-1.5">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400" id="ticketsTitle">Active Municipal Tickets[cite: 1]</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400" id="ticketsTitle">Active Municipal Tickets</label>
                     <div id="ticketTrackerList" class="space-y-1.5 text-xs max-h-36 overflow-y-auto">
                         <p class="text-slate-400 italic text-center text-xs" id="noTicketsText">No tickets generated.</p>
                     </div>
@@ -201,8 +200,8 @@
             </div>
             <div class="space-y-2 text-xs">
                 <p><strong>Name:</strong> <span id="profileNameDisplay">Citizen User</span></p>
-                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span>[cite: 1]</p>
-                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly[cite: 1].</p>
+                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span></p>
+                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly.</p>
             </div>
             <button type="button" onclick="handleLogout()" class="w-full py-2 bg-rose-600 text-white font-bold text-xs rounded-xl">Logout</button>
         </div>
@@ -362,7 +361,6 @@
             }
         }
 
-        // Dataset for Kochi
         const facilities = [
             { 
                 id: 1, name: "Ernakulam Central KSRTC Bus Terminal Restroom", type: "toilet", price: "Free", accessible: true, lat: 9.9816, lng: 76.2998, status: "Clean & Usable", updated: "10 mins ago", 
@@ -489,7 +487,7 @@
             userTickets.unshift({ id: ticketId, facility: locationName, status: status, route: "Routed to Ward 4 Municipal Officer" });
             renderTickets();
 
-            document.getElementById('reportSuccess').innerText = `Ticket #${ticketId} routed to local body[cite: 1]!`;
+            document.getElementById('reportSuccess').innerText = `Ticket #${ticketId} routed to local body!`;
             setTimeout(() => document.getElementById('reportSuccess').innerText = '', 4000);
             
             uploadedImageBase64 = '';
@@ -507,11 +505,11 @@
             container.innerHTML = userTickets.map(t => `
                 <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
                     <div class="flex justify-between font-bold">
-                        <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}[cite: 1]</span>
+                        <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}</span>
                         <span class="text-emerald-600">${t.status}</span>
                     </div>
                     <p class="text-slate-600 dark:text-slate-300 truncate">${t.facility}</p>
-                    <p class="text-[9px] text-emerald-600 font-semibold">✓ Routed to local body[cite: 1]</p>
+                    <p class="text-[9px] text-emerald-600 font-semibold">✓ Routed to local body</p>
                 </div>
             `).join('');
         }
