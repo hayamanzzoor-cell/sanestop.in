@@ -12,11 +12,12 @@
             theme: {
                 extend: {
                     borderRadius: {
-                        '3xl': '1.25rem',
-                        '4xl': '2rem',
+                        '3xl': '1.5rem',
+                        '4xl': '2.5rem',
                     },
                     boxShadow: {
-                        'floating': '0 8px 30px rgba(0, 0, 0, 0.12)',
+                        'airbnb': '0 6px 20px rgba(0, 0, 0, 0.08)',
+                        'airbnb-hover': '0 10px 25px rgba(0, 0, 0, 0.12)',
                     }
                 }
             }
@@ -32,35 +33,35 @@
         ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 9999px; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans transition-colors duration-500 overflow-x-hidden">
+<body class="bg-slate-900 text-slate-900 font-sans transition-colors duration-500 overflow-x-hidden">
 
     <!-- LOGIN / SIGNUP VIEW -->
     <div id="authView" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative">
-        <div class="bg-white/10 dark:bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/10 space-y-6">
-            <div class="text-center space-y-2">
-                <h1 class="text-3xl font-black tracking-tight text-white">Sane-Stop</h1>
-                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Secure Municipal Gateway</p>
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 dark:border-slate-800 space-y-6">
+            <div class="text-center space-y-1">
+                <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Sane-Stop</h1>
+                <p class="text-xs text-slate-500 uppercase tracking-widest font-semibold">Secure Municipal Gateway</p>
             </div>
 
-            <div class="flex bg-black/20 p-1 rounded-xl">
-                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2 rounded-lg text-xs font-bold bg-white/20 text-white transition-all">Login</button>
-                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400 transition-all">Sign Up</button>
+            <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
+                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all">Login</button>
+                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2 rounded-xl text-xs font-bold text-slate-500 transition-all">Sign Up</button>
             </div>
 
             <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
                 <div id="nameFieldContainer" class="hidden space-y-1">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Full Name</label>
-                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white outline-none focus:ring-2 focus:ring-teal-500">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Email Address</label>
-                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white outline-none focus:ring-2 focus:ring-teal-500">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Email Address</label>
+                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Password</label>
-                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white outline-none focus:ring-2 focus:ring-teal-500">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Password</label>
+                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
-                <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all">
+                <button type="submit" id="authSubmitBtn" class="w-full py-3.5 bg-slate-900 dark:bg-teal-600 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-lg transition-all">
                     Login to Portal
                 </button>
             </form>
@@ -75,78 +76,80 @@
             <form onsubmit="handleProfileCreation(event)" class="space-y-4">
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-400">Public Display Name</label>
-                    <input type="text" id="profileDisplayName" required class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
+                    <input type="text" id="profileDisplayName" required class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
                 </div>
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-400">Ward / Region</label>
-                    <input type="text" id="profileWard" required value="Ward 4 - Central Zone" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
+                    <input type="text" id="profileWard" required value="Ward 4 - Central Zone" class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
                 </div>
-                <button type="submit" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs uppercase rounded-xl transition-all">
+                <button type="submit" class="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs uppercase rounded-2xl transition-all">
                     Complete Setup & Enter Map
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- MAIN APP DASHBOARD (MOBILE-FIRST FLOATING UI) -->
-    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-900 text-slate-100 relative">
+    <!-- MAIN APP DASHBOARD (Airbnb-Style Floating Header & Categories) -->
+    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-900 text-slate-900 relative">
         
         <!-- FULL SCREEN MAP CANVAS -->
         <div class="absolute inset-0 z-0">
             <div id="map" class="w-full h-full"></div>
         </div>
 
-        <!-- FLOATING TOP APP BAR (Exact mobile reference layout) -->
-        <div class="absolute top-4 inset-x-4 z-20 space-y-2 pointer-events-none">
-            <!-- Search & Profile Bar -->
-            <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl p-3 rounded-2xl shadow-floating border border-slate-200/50 dark:border-slate-800/50 flex items-center justify-between pointer-events-auto">
-                <div class="flex items-center space-x-2 flex-1 mr-2">
-                    <button type="button" onclick="goBackToWelcome()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold">←</button>
-                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facilities..." class="w-full bg-transparent text-xs outline-none font-semibold px-1">
+        <!-- AIRBNB-STYLE FLOATING HEADER & CATEGORY CHIPS BAR -->
+        <div class="absolute top-4 inset-x-4 md:inset-x-8 z-20 space-y-3 pointer-events-none max-w-5xl mx-auto">
+            
+            <!-- Top Search & Navigation Pill -->
+            <div class="bg-white dark:bg-slate-900 backdrop-blur-xl px-4 py-3 rounded-full shadow-airbnb border border-slate-200/80 dark:border-slate-800 flex items-center justify-between pointer-events-auto">
+                <div class="flex items-center space-x-3 flex-1">
+                    <button type="button" onclick="goBackToWelcome()" class="text-xs font-extrabold text-slate-700 dark:text-slate-300 hover:text-slate-900">Back</button>
+                    <div class="h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facilities..." class="w-full bg-transparent text-xs outline-none font-semibold text-slate-900 dark:text-white">
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button type="button" onclick="panToUserLocation()" class="px-2.5 py-1.5 rounded-xl bg-teal-600 text-white text-[11px] font-bold shadow-sm">Near Me</button>
-                    <button type="button" onclick="toggleProfileModal(true)" class="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-[11px] font-bold" id="navProfileText">Profile</button>
+                    <button type="button" onclick="panToUserLocation()" class="px-3.5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-extrabold text-slate-800 dark:text-slate-200 hover:shadow-sm transition-all">GPS Near Me</button>
+                    <button type="button" onclick="toggleProfileModal(true)" class="px-4 py-2 rounded-full bg-slate-900 dark:bg-teal-600 text-white text-xs font-extrabold shadow-sm" id="navProfileText">Profile</button>
                 </div>
             </div>
 
-            <!-- Floating Filter Pill Chips Bar -->
-            <div class="flex items-center space-x-2 overflow-x-auto pb-1 pointer-events-auto no-scrollbar">
-                <button type="button" onclick="filterMarkers('all')" class="filter-btn px-4 py-2 rounded-full text-xs font-extrabold bg-teal-600 text-white shadow-md whitespace-nowrap" id="filterAll">All</button>
-                <button type="button" onclick="filterMarkers('toilet')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200/50 dark:border-slate-800/50 whitespace-nowrap" id="filterToilet">Toilets</button>
-                <button type="button" onclick="filterMarkers('water')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200/50 dark:border-slate-800/50 whitespace-nowrap" id="filterWater">Water Points</button>
-                <button type="button" onclick="filterMarkers('free')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200/50 dark:border-slate-800/50 whitespace-nowrap" id="filterFree">Free Only</button>
-                <button type="button" onclick="filterMarkers('accessible')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200/50 dark:border-slate-800/50 whitespace-nowrap" id="filterAccessible">Accessible</button>
+            <!-- Airbnb-Style Horizontal Scrollable Category Chips -->
+            <div class="flex items-center space-x-3 overflow-x-auto pb-2 pointer-events-auto no-scrollbar px-1">
+                <button type="button" onclick="filterMarkers('all')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-slate-900 dark:bg-teal-600 text-white shadow-airbnb whitespace-nowrap transition-all" id="filterAll">All Services</button>
+                <button type="button" onclick="filterMarkers('toilet')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterToilet">Toilets</button>
+                <button type="button" onclick="filterMarkers('water')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterWater">Water Points</button>
+                <button type="button" onclick="filterMarkers('free')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterFree">Free Only</button>
+                <button type="button" onclick="filterMarkers('accessible')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterAccessible">Wheelchair Accessible</button>
             </div>
         </div>
 
-        <!-- FLOATING BOTTOM TICKET/REPORTS TILE -->
-        <div class="absolute bottom-4 inset-x-4 z-20 pointer-events-none">
-            <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl p-3 rounded-2xl shadow-floating border border-slate-200/50 dark:border-slate-800/50 max-h-36 overflow-y-auto pointer-events-auto space-y-1">
-                <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase">
+        <!-- FLOATING BOTTOM TICKET TRACKER TILE -->
+        <div class="absolute bottom-6 inset-x-4 md:right-8 md:left-auto md:w-80 z-20 pointer-events-none">
+            <div class="bg-white dark:bg-slate-900 backdrop-blur-xl p-4 rounded-3xl shadow-airbnb border border-slate-200/80 dark:border-slate-800 max-h-40 overflow-y-auto pointer-events-auto space-y-2">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                     <span id="ticketsTitle">Active Municipal Tickets</span>
-                    <button type="button" onclick="toggleDarkMode()" class="text-[10px] underline">Toggle Theme</button>
+                    <button type="button" onclick="toggleDarkMode()" class="text-[10px] underline font-semibold text-slate-600 dark:text-slate-400">Toggle Theme</button>
                 </div>
-                <div id="ticketTrackerList" class="space-y-1 text-xs">
-                    <p class="text-slate-400 italic text-center text-xs" id="noTicketsText">No tickets generated.</p>
+                <div id="ticketTrackerList" class="space-y-1.5 text-xs">
+                    <p class="text-slate-400 italic text-center text-xs py-1" id="noTicketsText">No tickets generated.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- USER PROFILE MODAL -->
-    <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+    <div id="profileModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md p-6 border border-slate-100 dark:border-slate-800 space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                <h2 class="text-base font-bold" id="profileModalTitle">My Profile & Credentials</h2>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white" id="profileModalTitle">My Profile & Credentials</h2>
                 <button type="button" onclick="toggleProfileModal(false)" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-xs">✕</button>
             </div>
-            <div class="space-y-2 text-xs">
+            <div class="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                 <p><strong>Name:</strong> <span id="profileNameDisplay">Citizen User</span></p>
                 <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span></p>
                 <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly.</p>
             </div>
-            <button type="button" onclick="handleLogout()" class="w-full py-2 bg-rose-600 text-white font-bold text-xs rounded-xl">Logout</button>
+            <button type="button" onclick="handleLogout()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-sm transition-all">Logout</button>
         </div>
     </div>
 
@@ -157,6 +160,33 @@
         let userTickets = [];
         let currentLang = 'en';
         let currentUser = null;
+
+        const translations = {
+            en: {
+                navProfile: "Profile",
+                all: "All Services", toilets: "Toilets", water: "Water Points", free: "Free Only", accessible: "Wheelchair Accessible",
+                ticketsTitle: "Active Municipal Tickets", noTickets: "No tickets generated.",
+                profileTitle: "My Profile & Credentials"
+            },
+            ml: {
+                navProfile: "പ്രൊഫൈൽ",
+                all: "എല്ലാ സേവനങ്ങളും", toilets: "ടോയ്‌ലറ്റ്", water: "വെള്ളം", free: "സൗജന്യം മാത്രം", accessible: "ഭിന്നശേഷി സൗഹൃദം",
+                ticketsTitle: "സജീവമായ ടിക്കറ്റുകൾ", noTickets: "ടിക്കറ്റുകൾ ഒന്നുമില്ല.",
+                profileTitle: "പ്രൊഫൈൽ"
+            },
+            hi: {
+                navProfile: "प्रोफ़ाइल",
+                all: "सभी सेवाएं", toilets: "शौचालय", water: "पानी", free: "केवल मुफ़्त", accessible: "सुलभ",
+                ticketsTitle: "सक्रिय टिकट", noTickets: "कोई टिकट नहीं.",
+                profileTitle: "यूजर प्रोफाइल"
+            },
+            ta: {
+                navProfile: "சுயவிவரம்",
+                all: "அனைத்து சேவைகள்", toilets: "கழிப்பறை", water: "நீர்", free: "இலவசம் மட்டும்", accessible: "அணுகக்கூடியது",
+                ticketsTitle: "செயலில் உள்ள டிக்கெட்டுகள்", noTickets: "டிக்கெட்டுகள் இல்லை.",
+                profileTitle: "சுயவிவரம்"
+            }
+        };
 
         window.onload = function() {
             const savedUser = localStorage.getItem('saneStopUser');
@@ -182,13 +212,13 @@
             const submitBtn = document.getElementById('authSubmitBtn');
 
             if (tab === 'signup') {
-                signupBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white/20 text-white transition-all";
-                loginBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-400 transition-all";
+                signupBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
+                loginBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold text-slate-500 transition-all";
                 nameField.classList.remove('hidden');
                 submitBtn.innerText = "Register Account";
             } else {
-                loginBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white/20 text-white transition-all";
-                signupBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-400 transition-all";
+                loginBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
+                signupBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold text-slate-500 transition-all";
                 nameField.classList.add('hidden');
                 submitBtn.innerText = "Login to Portal";
             }
@@ -250,11 +280,19 @@
             if (rememberedPass) document.getElementById('authPassword').value = rememberedPass;
         }
 
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('navProfileText').innerText = t.navProfile;
+            document.getElementById('ticketsTitle').innerText = t.ticketsTitle;
+            document.getElementById('noTicketsText').innerText = t.noTickets;
+        }
+
         function filterMarkers(type) {
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200/50 dark:border-slate-800/50 whitespace-nowrap";
+                btn.className = "filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all";
             });
-            event.target.className = "filter-btn px-4 py-2 rounded-full text-xs font-extrabold bg-teal-600 text-white shadow-md whitespace-nowrap";
+            event.target.className = "filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-slate-900 dark:bg-teal-600 text-white shadow-airbnb whitespace-nowrap transition-all";
 
             if (type === 'all') {
                 renderMarkers(facilities);
@@ -328,36 +366,35 @@
                 const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${f.lat},${f.lng}`;
                 
                 let reviewsHtml = f.reviews.length > 0 ? f.reviews.map(r => `
-                    <div style="border-top:1px solid #eee; margin-top:3px; padding-top:3px; font-size:10px;">
+                    <div style="border-top:1px solid #eee; margin-top:4px; padding-top:4px; font-size:10px;">
                         <b>${r.rating}</b> - ${r.text}
                     </div>
                 `).join('') : '<i style="font-size:10px; color:#888;">No reviews yet</i>';
 
                 const popupContent = document.createElement('div');
-                popupContent.style.cssText = "font-family:sans-serif; min-width:200px; font-size:11px;";
+                popupContent.style.cssText = "font-family:sans-serif; min-width:210px; font-size:11px; padding:4px;";
                 popupContent.innerHTML = `
-                    <b style="font-size:12px; color:#0f766e; display:block; margin-bottom:2px;">${f.name}</b>
+                    <b style="font-size:13px; color:#0f766e; display:block; margin-bottom:3px;">${f.name}</b>
                     <span>Type: <b>${f.type.toUpperCase()}</b> | ${f.price}</span><br>
                     <span>Status: <b style="color:${f.status.includes('Clean') ? 'green' : 'red'};">${f.status}</b></span><br><br>
                     
                     <b>Community Reviews:</b>
-                    <div style="max-height:60px; overflow-y:auto; margin-bottom:6px;" id="reviews-list-${f.id}">${reviewsHtml}</div>
+                    <div style="max-height:60px; overflow-y:auto; margin-bottom:6px;">${reviewsHtml}</div>
                     
-                    <!-- Rating & Review Box Inside Popup -->
-                    <div style="background:#f1f5f9; padding:6px; border-radius:6px; margin-bottom:6px;">
-                        <div style="font-weight:bold; margin-bottom:2px;">Add Review & Rating</div>
-                        <select id="pop-rating-${f.id}" style="width:100%; margin-bottom:3px; font-size:10px; padding:2px;">
+                    <div style="background:#f8fafc; padding:8px; border-radius:8px; margin-bottom:8px; border:1px solid #e2e8f0;">
+                        <div style="font-weight:bold; margin-bottom:3px;">Add Review & Rating</div>
+                        <select id="pop-rating-${f.id}" style="width:100%; margin-bottom:4px; font-size:10px; padding:3px; border-radius:4px; border:1px solid #cbd5e1;">
                             <option value="5 Stars">5 Stars</option>
                             <option value="4 Stars">4 Stars</option>
                             <option value="3 Stars">3 Stars</option>
                             <option value="2 Stars">2 Stars</option>
                             <option value="1 Star">1 Star</option>
                         </select>
-                        <input type="text" id="pop-text-${f.id}" placeholder="Write condition update..." style="width:100%; font-size:10px; padding:3px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:3px;">
-                        <button type="button" onclick="submitPopupReview(${f.id})" style="background:#0d9488; color:white; border:none; padding:3px 6px; border-radius:4px; font-size:10px; font-weight:bold; width:100%; cursor:pointer;">Submit Rating & Report</button>
+                        <input type="text" id="pop-text-${f.id}" placeholder="Write condition update..." style="width:100%; font-size:10px; padding:4px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:4px;">
+                        <button type="button" onclick="submitPopupReview(${f.id})" style="background:#0f172a; color:white; border:none; padding:5px; border-radius:6px; font-size:10px; font-weight:bold; width:100%; cursor:pointer;">Submit Rating & Report</button>
                     </div>
 
-                    <a href="${mapsUrl}" target="_blank" style="background:#2563eb; color:white; padding:3px 6px; border-radius:99px; text-decoration:none; font-size:10px; font-weight:bold; display:block; text-align:center;">Get Directions</a>
+                    <a href="${mapsUrl}" target="_blank" style="background:#2563eb; color:white; padding:5px; border-radius:99px; text-decoration:none; font-size:10px; font-weight:bold; display:block; text-align:center;">Get Directions</a>
                 `;
 
                 const marker = L.marker([f.lat, f.lng]).addTo(map).bindPopup(popupContent);
@@ -396,7 +433,7 @@
             }
 
             container.innerHTML = userTickets.map(t => `
-                <div class="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
+                <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
                     <div class="flex justify-between font-bold text-[10px]">
                         <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}</span>
                         <span class="text-emerald-600">${t.status}</span>
