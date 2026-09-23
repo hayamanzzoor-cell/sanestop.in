@@ -12,11 +12,11 @@
             theme: {
                 extend: {
                     borderRadius: {
-                        '3xl': '1.75rem',
-                        '4xl': '2.5rem',
+                        '3xl': '1.25rem',
+                        '4xl': '2rem',
                     },
                     boxShadow: {
-                        'glow': '0 0 35px -5px rgba(20, 184, 166, 0.5)',
+                        'card': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
                     }
                 }
             }
@@ -25,8 +25,7 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        #map { height: calc(100vh - 5rem); width: 100%; }
-        @media (max-width: 768px) { #map { height: 50vh; } }
+        #map { height: calc(100vh - 4.5rem); width: 100%; z-index: 1; }
         .dark .leaflet-tile-pane { filter: brightness(0.6) contrast(1.3) saturate(1.2); }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -36,144 +35,120 @@
 <body class="bg-slate-900 text-slate-100 font-sans transition-colors duration-500 overflow-x-hidden">
 
     <!-- LOGIN / SIGNUP VIEW -->
-    <div id="authView" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-950 via-teal-900 to-slate-950 relative">
-        <div class="bg-white/10 dark:bg-slate-900/80 backdrop-blur-2xl p-8 rounded-4xl shadow-2xl w-full max-w-md border border-white/20 space-y-6">
+    <div id="authView" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative">
+        <div class="bg-white/10 dark:bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/10 space-y-6">
             <div class="text-center space-y-2">
-                <h1 class="text-3xl font-black tracking-tight text-white bg-gradient-to-r from-teal-300 to-blue-400 bg-clip-text text-transparent">Sane-Stop</h1>
-                <p class="text-xs text-teal-200 uppercase tracking-widest font-semibold">Secure Municipal Gateway</p>
+                <h1 class="text-3xl font-black tracking-tight text-white">Sane-Stop</h1>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold">GIS Municipal Gateway</p>
             </div>
 
-            <div class="flex bg-black/20 p-1.5 rounded-2xl">
-                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white/20 text-white transition-all shadow-sm">Login</button>
-                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-400 transition-all">Sign Up</button>
+            <div class="flex bg-black/20 p-1 rounded-xl">
+                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2 rounded-lg text-xs font-bold bg-white/20 text-white transition-all">Login</button>
+                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400 transition-all">Sign Up</button>
             </div>
 
             <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
                 <div id="nameFieldContainer" class="hidden space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Full Name</label>
-                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
+                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
                 <div class="space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Email Address</label>
-                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
+                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
                 <div class="space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Password</label>
-                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
+                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
-                <button type="submit" id="authSubmitBtn" class="w-full py-3.5 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-teal-500/25 transition-all transform hover:scale-[1.02]">
+                <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all">
                     Login to Portal
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- PROFILE CREATION VIEW (First time sign up only) -->
+    <!-- PROFILE CREATION VIEW -->
     <div id="profileCreationView" class="hidden min-h-screen flex flex-col items-center justify-center p-6 bg-slate-950">
-        <div class="bg-slate-900 p-8 rounded-4xl shadow-2xl w-full max-w-md border border-slate-800 space-y-6">
+        <div class="bg-slate-900 p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-800 space-y-6">
             <h2 class="text-xl font-black text-white">Create Your Citizen Profile</h2>
-            <p class="text-xs text-slate-400">This is a one-time profile setup required for municipal issue routing.</p>
+            <p class="text-xs text-slate-400">One-time setup required for municipal issue routing.</p>
             <form onsubmit="handleProfileCreation(event)" class="space-y-4">
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-400">Public Display Name</label>
-                    <input type="text" id="profileDisplayName" required class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
+                    <input type="text" id="profileDisplayName" required class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
                 </div>
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-400">Ward / Region</label>
-                    <input type="text" id="profileWard" required value="Ward 4 - Central Zone" class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
+                    <input type="text" id="profileWard" required value="Ward 4 - Central Zone" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-teal-500 to-blue-600 text-white font-bold text-xs uppercase rounded-2xl shadow-lg shadow-teal-500/20 transition-all">
-                    Complete Setup & Enter App
+                <button type="submit" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs uppercase rounded-xl transition-all">
+                    Complete Setup & Enter Map
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- MAIN APP DASHBOARD -->
-    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
-        <!-- Top Navigation Bar -->
-        <header class="h-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl shadow-sm px-4 md:px-8 flex items-center justify-between z-50 border-b border-slate-200/60 dark:border-slate-800/60 flex-shrink-0">
-            <div class="flex items-center space-x-3.5">
-                <button type="button" onclick="goBackToWelcome()" class="px-3.5 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm">
-                    ← Back
-                </button>
-                <div>
-                    <span class="text-xl font-black tracking-tight bg-gradient-to-r from-blue-600 to-teal-500 dark:from-blue-400 dark:to-teal-400 bg-clip-text text-transparent">Sane-Stop</span>
-                    <span class="block text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">Public Welfare & Access Finder</span>
+    <!-- MAIN APP DASHBOARD (GIS LAYOUT) -->
+    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+        
+        <!-- TOP GIS NAVIGATION BAR (Like the reference image) -->
+        <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 flex items-center justify-between z-30 flex-shrink-0 shadow-sm">
+            <div class="flex items-center space-x-3">
+                <button type="button" onclick="goBackToWelcome()" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">← Back</button>
+                <div class="flex items-center space-x-2 border-l border-slate-200 dark:border-slate-800 pl-3">
+                    <span class="w-3 h-3 rounded-full bg-teal-500"></span>
+                    <span class="text-sm font-bold tracking-tight">Kochi Region / Sane-Stop GIS Portal</span>
                 </div>
             </div>
 
-            <!-- Smart Search Bar -->
-            <div class="hidden sm:flex items-center bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md px-4 py-2.5 rounded-full w-56 md:w-80 border border-slate-200 dark:border-slate-700/60 shadow-inner">
-                <span class="text-slate-400 mr-2.5 text-xs font-bold">Search</span>
-                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facility name..." class="bg-transparent border-none outline-none w-full text-xs md:text-sm font-medium">
-            </div>
-
-            <!-- Action Suite -->
-            <div class="flex items-center space-x-2 md:space-x-3">
-                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-xs px-3.5 py-2 rounded-full outline-none font-bold border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer">
+            <!-- Top Search & Filters -->
+            <div class="flex items-center space-x-3">
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facilities..." class="hidden md:block bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-1.5 rounded-lg text-xs w-64 outline-none">
+                
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs px-3 py-1.5 rounded-lg outline-none font-semibold">
                     <option value="en">English</option>
                     <option value="ml">മലയാളം</option>
                     <option value="hi">हिंदी</option>
                     <option value="ta">தமிழ்</option>
                 </select>
 
-                <button type="button" onclick="toggleDarkMode()" class="px-3.5 py-2 rounded-full bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-xs font-bold hover:scale-105 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">Theme</button>
-                
-                <button type="button" onclick="toggleProfileModal(true)" class="group flex items-center space-x-2 bg-gradient-to-r from-teal-500/15 to-blue-500/15 hover:from-teal-500/25 hover:to-blue-500/25 px-4 py-2 rounded-full border border-teal-500/30 transition-all shadow-glow hover:scale-105 active:scale-95">
-                    <div class="relative">
-                        <div class="w-7 h-7 bg-gradient-to-tr from-teal-500 to-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-md">SS</div>
-                        <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full animate-pulse"></div>
-                    </div>
-                    <span class="text-xs font-black text-teal-700 dark:text-teal-300 hidden md:inline" id="navProfileText">Profile</span>
-                </button>
+                <button type="button" onclick="toggleDarkMode()" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold border border-slate-200 dark:border-slate-700">Theme</button>
+                <button type="button" onclick="toggleProfileModal(true)" class="px-3 py-1.5 rounded-lg bg-teal-600 text-white text-xs font-bold shadow-sm" id="navProfileText">Profile</button>
             </div>
         </header>
 
-        <!-- Main Body: Sidebar + Map -->
-        <div class="flex flex-1 flex-col md:flex-row relative overflow-hidden">
-            <!-- Sidebar Controls -->
-            <aside class="w-full md:w-[390px] lg:w-[430px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl p-5 md:p-6 shadow-2xl z-10 overflow-y-auto space-y-4 md:space-y-5 flex-shrink-0 border-r border-slate-200/60 dark:border-slate-800/60 h-[48vh] md:h-auto">
-                
-                <!-- Action Grid -->
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button type="button" onclick="panToUserLocation()" class="py-3.5 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 text-white text-xs font-black rounded-2xl shadow-lg shadow-teal-500/25 transition-all transform hover:scale-[1.02]">
-                        Near Me GPS
-                    </button>
-                    <button type="button" onclick="triggerEmergencySOS()" class="py-3.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 text-white text-xs font-black rounded-2xl shadow-lg shadow-rose-500/25 transition-all transform hover:scale-[1.02]">
-                        Emergency SOS
-                    </button>
+        <!-- MAP CONTAINER WITH FLOATING DESKTOP PANEL -->
+        <div class="flex-1 relative">
+            <div id="map" class="w-full h-full"></div>
+
+            <!-- FLOATING LAYER/CONTROL PANEL (Exact style reference from image) -->
+            <div class="absolute top-4 left-4 z-20 w-80 max-h-[calc(100vh-6rem)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-card border border-slate-200 dark:border-slate-800 p-4 overflow-y-auto space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Layer & Actions</span>
+                    <button onclick="panToUserLocation()" class="text-[11px] font-bold text-teal-600 dark:text-teal-400 hover:underline">GPS Near Me</button>
                 </div>
 
-                <!-- Upgraded Filter Chips -->
-                <div class="bg-slate-50/80 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-                    <h2 class="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-3" id="filtersTitle">Find Fast</h2>
-                    <div class="grid grid-cols-2 gap-2" id="filterButtonsContainer">
-                        <button type="button" onclick="setActiveFilter('all', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-teal-600 text-white shadow-md shadow-teal-500/30 transition-all flex items-center justify-center space-x-1.5" id="filterAll">
-                            <span>All Services</span>
-                        </button>
-                        <button type="button" onclick="setActiveFilter('toilet', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterToilet">
-                            <span>Toilets</span>
-                        </button>
-                        <button type="button" onclick="setActiveFilter('water', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterWater">
-                            <span>Water Points</span>
-                        </button>
-                        <button type="button" onclick="setActiveFilter('free', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterFree">
-                            <span>Free Only</span>
-                        </button>
-                        <button type="button" onclick="setActiveFilter('accessible', this)" class="filter-btn col-span-2 py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterAccessible">
-                            <span>Wheelchair Accessible</span>
-                        </button>
+                <!-- Quick Filters -->
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter View</label>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button onclick="filterMarkers('all')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-teal-600 text-white shadow-sm" id="filterAll">All Services</button>
+                        <button onclick="filterMarkers('toilet')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterToilet">Toilets</button>
+                        <button onclick="filterMarkers('water')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterWater">Water Points</button>
+                        <button onclick="filterMarkers('free')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterFree">Free Only</button>
+                        <button onclick="filterMarkers('accessible')" class="filter-btn col-span-2 py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterAccessible">Wheelchair Accessible</button>
                     </div>
                 </div>
 
+                <hr class="border-slate-100 dark:border-slate-800">
+
                 <!-- Report Form -->
-                <div class="bg-gradient-to-b from-slate-50/90 to-teal-50/30 dark:from-slate-800/60 dark:to-teal-950/20 p-4.5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
-                    <h3 class="font-black text-xs text-slate-900 dark:text-slate-100" id="reportTitle">Found a Problem? Report It</h3>
-                    <form onsubmit="handleReport(event)" class="space-y-2.5">
-                        <input type="text" id="reportLocationInput" required placeholder="Facility name or GPS coordinate..." class="w-full px-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium outline-none focus:ring-2 focus:ring-teal-400">
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400" id="reportTitle">Report Condition & Route Ticket</label>
+                    <form onsubmit="handleReport(event)" class="space-y-2">
+                        <input type="text" id="reportLocationInput" required placeholder="Facility name..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs outline-none">
                         
-                        <select id="reportStatus" class="w-full px-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold outline-none cursor-pointer">
+                        <select id="reportStatus" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold outline-none">
                             <option value="Broken / Not Working">Broken / Not Working</option>
                             <option value="Closed">Closed</option>
                             <option value="Dirty / Uncleaned">Dirty / Uncleaned</option>
@@ -181,69 +156,55 @@
                             <option value="Clean & Usable">Clean & Usable</option>
                         </select>
 
-                        <textarea id="reviewText" placeholder="Write a helpful review..." class="w-full px-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium outline-none h-16 resize-none"></textarea>
+                        <textarea id="reviewText" placeholder="Add review notes..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs outline-none h-14 resize-none"></textarea>
                         
-                        <div class="flex items-center justify-between text-xs px-1 bg-white/70 dark:bg-slate-900/70 p-3 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-                            <span class="font-bold text-slate-500">Rating: 
-                                <select id="starRating" class="bg-transparent font-black text-amber-500 outline-none cursor-pointer">
-                                    <option value="5 Stars">5 Stars</option>
-                                    <option value="4 Stars">4 Stars</option>
-                                    <option value="3 Stars">3 Stars</option>
-                                    <option value="2 Stars">2 Stars</option>
-                                    <option value="1 Star">1 Star</option>
-                                </select>
-                            </span>
-                            <label class="cursor-pointer bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 px-3.5 py-2 rounded-xl font-bold hover:bg-teal-100 transition-all text-[11px] shadow-sm">
+                        <div class="flex items-center justify-between text-xs px-1">
+                            <select id="starRating" class="bg-transparent font-bold text-amber-500 outline-none text-xs">
+                                <option value="5 Stars">5 Stars</option>
+                                <option value="4 Stars">4 Stars</option>
+                                <option value="3 Stars">3 Stars</option>
+                                <option value="2 Stars">2 Stars</option>
+                                <option value="1 Star">1 Star</option>
+                            </select>
+                            <label class="cursor-pointer text-teal-600 font-bold hover:underline text-xs">
                                 Add Photo <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handleImagePreview(event)">
                             </label>
                         </div>
-                        <div id="imageFileName" class="text-[10px] text-teal-500 font-bold px-1"></div>
+                        <div id="imageFileName" class="text-[10px] text-teal-500 font-bold"></div>
 
-                        <button type="submit" id="submitReportBtn" class="w-full py-3.5 bg-gradient-to-r from-teal-600 to-emerald-600 text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg shadow-teal-500/25 transition-all">
-                            Send Report & Route to Ward
+                        <button type="submit" id="submitReportBtn" class="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm">
+                            Submit & Route to Local Body[cite: 1]
                         </button>
                     </form>
-                    <div id="reportSuccess" class="text-xs text-teal-600 dark:text-teal-400 font-bold text-center"></div>
+                    <div id="reportSuccess" class="text-[11px] text-teal-600 font-bold text-center"></div>
                 </div>
 
-                <!-- Municipal Ticket Tracker Section -->
-                <div class="bg-slate-50/80 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-                    <h2 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-2.5" id="ticketsTitle">My Sent Reports & Municipal Tickets</h2>
-                    <div id="ticketTrackerList" class="space-y-2 text-xs">
-                        <p class="text-slate-400 italic text-center py-2 text-xs" id="noTicketsText">No reports sent yet.</p>
+                <hr class="border-slate-100 dark:border-slate-800">
+
+                <!-- Municipal Tickets Tracker -->
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400" id="ticketsTitle">Active Municipal Tickets[cite: 1]</label>
+                    <div id="ticketTrackerList" class="space-y-1.5 text-xs max-h-36 overflow-y-auto">
+                        <p class="text-slate-400 italic text-center text-xs" id="noTicketsText">No tickets generated.</p>
                     </div>
                 </div>
-            </aside>
-
-            <!-- Map Area -->
-            <main class="flex-1 relative h-[52vh] md:h-auto">
-                <div id="map" class="w-full h-full"></div>
-            </main>
+            </div>
         </div>
     </div>
 
     <!-- USER PROFILE MODAL -->
-    <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-4xl shadow-2xl w-full max-w-lg p-6 md:p-8 border border-slate-200 dark:border-slate-800 space-y-5">
+    <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md p-6 border border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                <h2 class="text-lg md:text-xl font-black tracking-tight" id="profileModalTitle">My Profile & Credentials</h2>
-                <button type="button" onclick="toggleProfileModal(false)" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold">✕</button>
+                <h2 class="text-base font-bold" id="profileModalTitle">My Profile & Credentials</h2>
+                <button type="button" onclick="toggleProfileModal(false)" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-xs">✕</button>
             </div>
-
-            <div class="flex items-center space-x-4 p-4 rounded-3xl bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-950/40 dark:to-teal-950/40 border border-blue-100 dark:border-teal-900/60 shadow-sm">
-                <div class="w-14 h-14 bg-gradient-to-tr from-teal-600 to-emerald-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">SS</div>
-                <div>
-                    <h3 class="font-extrabold text-base text-slate-900 dark:text-white" id="profileNameDisplay">Sane-Stop Citizen User</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium" id="profileWardDisplay">Ward 4 - Central Zone</p>
-                    <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">Verified Municipal Contributor</span>
-                </div>
+            <div class="space-y-2 text-xs">
+                <p><strong>Name:</strong> <span id="profileNameDisplay">Citizen User</span></p>
+                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span>[cite: 1]</p>
+                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly[cite: 1].</p>
             </div>
-
-            <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-                <p><strong>Privacy Note:</strong> Your personal identity and location histories are securely encrypted and never disclosed publicly in accordance with strict municipal privacy guidelines.</p>
-                <p><strong>Support Helpline:</strong> Contact Urban Sanitation & Water Cell at 1800-SANESTOP.</p>
-            </div>
-            <button type="button" onclick="handleLogout()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all">Logout / Switch User</button>
+            <button type="button" onclick="handleLogout()" class="w-full py-2 bg-rose-600 text-white font-bold text-xs rounded-xl">Logout</button>
         </div>
     </div>
 
@@ -258,31 +219,31 @@
 
         const translations = {
             en: {
-                navProfile: "Profile", nearMe: "Near Me", sos: "SOS Help", filters: "Find Fast",
+                navProfile: "Profile", filters: "Layer & Actions",
                 all: "All Services", toilets: "Toilets", water: "Water Points", free: "Free Only", accessible: "Wheelchair Accessible",
-                reportTitle: "Found a Problem? Report It", submitReport: "Send Report & Route to Ward",
-                ticketsTitle: "My Sent Reports & Municipal Tickets", noTickets: "No reports sent yet.",
+                reportTitle: "Report Condition & Route Ticket", submitReport: "Submit & Route to Local Body",
+                ticketsTitle: "Active Municipal Tickets", noTickets: "No tickets generated.",
                 profileTitle: "My Profile & Credentials"
             },
             ml: {
-                navProfile: "പ്രൊഫൈൽ", nearMe: "എന്റെ അരികിൽ", sos: "അടിയന്തിര സഹായം", filters: "പെട്ടെന്ന് കണ്ടെത്തുക",
+                navProfile: "പ്രൊഫൈൽ", filters: "ലെയർ & ആക്ഷൻസ്",
                 all: "എല്ലാ സേവനങ്ങളും", toilets: "ടോയ്‌ലറ്റ്", water: "വെള്ളം", free: "സൗജന്യം മാത്രം", accessible: "ഭിന്നശേഷി സൗഹൃദം",
-                reportTitle: "പ്രശ്നം റിപ്പോർട്ട് ചെയ്യുക", submitReport: "അയക്കുക",
-                ticketsTitle: "എന്റെ റിപ്പോർട്ടുകൾ", noTickets: "റിപ്പോർട്ടുകൾ ഒന്നുമില്ല.",
+                reportTitle: "പ്രശ്നം റിപ്പോർട്ട് ചെയ്യുക", submitReport: "മുനിസിപ്പാലിറ്റിയിലേക്ക് അയക്കുക",
+                ticketsTitle: "സജീവമായ ടിക്കറ്റുകൾ", noTickets: "ടിക്കറ്റുകൾ ഒന്നുമില്ല.",
                 profileTitle: "പ്രൊഫൈൽ"
             },
             hi: {
-                navProfile: "प्रोफ़ाइल", nearMe: "आसपास", sos: "आपातकालीन मदद", filters: "त्वरित फ़िल्टर",
+                navProfile: "प्रोफ़ाइल", filters: "लेयर और एक्शन",
                 all: "सभी सेवाएं", toilets: "शौचालय", water: "पानी", free: "केवल मुफ़्त", accessible: "सुलभ",
-                reportTitle: "समस्या रिपोर्ट करें", submitReport: "रिपोर्ट भेजें",
-                ticketsTitle: "मेरी भेजी गई रिपोर्ट्स", noTickets: "कोई रिपोर्ट नहीं.",
+                reportTitle: "समस्या रिपोर्ट करें और टिकट भेजें", submitReport: "नगर निकाय को भेजें",
+                ticketsTitle: "सक्रिय टिकट", noTickets: "कोई टिकट नहीं.",
                 profileTitle: "यूजर प्रोफाइल"
             },
             ta: {
-                navProfile: "சுயவிவரம்", nearMe: "அருகில்", sos: "அவசர உதவி", filters: "விரைவு தேடல்",
+                navProfile: "சுயவிவரம்", filters: "அடுக்கு & செயல்பாடுகள்",
                 all: "அனைத்து சேவைகள்", toilets: "கழிப்பறை", water: "நீர்", free: "இலவசம் மட்டும்", accessible: "அணுகக்கூடியது",
-                reportTitle: "சிக்கலைப் புகாரளி", submitReport: "அனுப்பு",
-                ticketsTitle: "எனது புகார்கள்", noTickets: "புகார்கள் இல்லை.",
+                reportTitle: "சிக்கலைப் புகாரளி", submitReport: "நகராட்சிக்கு அனுப்பவும்",
+                ticketsTitle: "செயலில் உள்ள டிக்கெட்டுகள்", noTickets: "டிக்கெட்டுகள் இல்லை.",
                 profileTitle: "சுயவிவரம்"
             }
         };
@@ -311,21 +272,19 @@
             const submitBtn = document.getElementById('authSubmitBtn');
 
             if (tab === 'signup') {
-                signupBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white/20 text-white transition-all shadow-sm";
-                loginBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-400 transition-all";
+                signupBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white/20 text-white transition-all";
+                loginBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-400 transition-all";
                 nameField.classList.remove('hidden');
                 submitBtn.innerText = "Register Account";
             } else {
-                loginBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white/20 text-white transition-all shadow-sm";
-                signupBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-400 transition-all";
+                loginBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white/20 text-white transition-all";
+                signupBtn.className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-400 transition-all";
                 nameField.classList.add('hidden');
                 submitBtn.innerText = "Login to Portal";
             }
         }
 
         let tempEmail = '';
-        let tempPass = '';
-
         function handleAuth(e) {
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
@@ -335,9 +294,7 @@
 
             localStorage.setItem('saneStopEmail', email);
             localStorage.setItem('saneStopPass', pass);
-
             tempEmail = email;
-            tempPass = pass;
 
             if (isSignup) {
                 document.getElementById('authView').classList.add('hidden');
@@ -387,51 +344,45 @@
             currentLang = lang;
             const t = translations[lang];
             document.getElementById('navProfileText').innerText = t.navProfile;
-            document.getElementById('filtersTitle').innerText = t.filters;
             document.getElementById('reportTitle').innerText = t.reportTitle;
             document.getElementById('submitReportBtn').innerText = t.submitReport;
             document.getElementById('ticketsTitle').innerText = t.ticketsTitle;
             document.getElementById('noTicketsText').innerText = t.noTickets;
-            document.getElementById('profileModalTitle').innerText = t.profileTitle;
         }
 
-        function setActiveFilter(type, btnElement) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm";
-            });
-            btnElement.className = "filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-teal-600 text-white shadow-md shadow-teal-500/30 transition-all flex items-center justify-center space-x-1.5";
-            filterMarkers(type);
+        function filterMarkers(type) {
+            if (type === 'all') {
+                renderMarkers(facilities);
+            } else if (type === 'free') {
+                renderMarkers(facilities.filter(f => f.price.toLowerCase().includes('free')));
+            } else if (type === 'accessible') {
+                renderMarkers(facilities.filter(f => f.accessible === true));
+            } else {
+                renderMarkers(facilities.filter(f => f.type === type));
+            }
         }
 
-        // Comprehensive Dataset for Kochi
+        // Dataset for Kochi
         const facilities = [
             { 
-                id: 1, name: "Ernakulam Central KSRTC Bus Terminal Restroom", type: "toilet", price: "Free", accessible: true, confidence: "98% Reliable", lat: 9.9816, lng: 76.2998, status: "Clean & Usable", updated: "10 mins ago", 
-                reviews: [{rating: "5 Stars", text: "Spacious and well maintained near platform 1.", img: ""}] 
+                id: 1, name: "Ernakulam Central KSRTC Bus Terminal Restroom", type: "toilet", price: "Free", accessible: true, lat: 9.9816, lng: 76.2998, status: "Clean & Usable", updated: "10 mins ago", 
+                reviews: [{rating: "5 Stars", text: "Spacious and well maintained.", img: ""}] 
             },
             { 
-                id: 2, name: "MG Road Metro Station Drinking Water Kiosk", type: "water", price: "Free", accessible: true, confidence: "95% Reliable", lat: 9.9750, lng: 76.2853, status: "Clean & Usable", updated: "25 mins ago", 
-                reviews: [{rating: "4 Stars", text: "Cold RO water available right near security check.", img: ""}] 
+                id: 2, name: "MG Road Metro Station Drinking Water Kiosk", type: "water", price: "Free", accessible: true, lat: 9.9750, lng: 76.2853, status: "Clean & Usable", updated: "25 mins ago", 
+                reviews: [{rating: "4 Stars", text: "Cold RO water available.", img: ""}] 
             },
             { 
-                id: 3, name: "Marine Drive Walkway Public Restroom", type: "toilet", price: "Paid (5 INR)", accessible: true, confidence: "92% Reliable", lat: 9.9890, lng: 76.2790, status: "Clean & Usable", updated: "5 mins ago", 
-                reviews: [{rating: "5 Stars", text: "Great view and very clean facilities.", img: ""}] 
+                id: 3, name: "Marine Drive Walkway Public Restroom", type: "toilet", price: "Paid (5 INR)", accessible: true, lat: 9.9890, lng: 76.2790, status: "Clean & Usable", updated: "5 mins ago", 
+                reviews: [{rating: "5 Stars", text: "Very clean facilities.", img: ""}] 
             },
             { 
-                id: 4, name: "Ernakulam South Railway Station Water Point", type: "water", price: "Free", accessible: false, confidence: "89% Reliable", lat: 9.9680, lng: 76.2870, status: "Clean & Usable", updated: "40 mins ago", 
+                id: 4, name: "Ernakulam South Railway Station Water Point", type: "water", price: "Free", accessible: false, lat: 9.9680, lng: 76.2870, status: "Clean & Usable", updated: "40 mins ago", 
                 reviews: [] 
             },
             { 
-                id: 5, name: "High Court Junction Public Restroom", type: "toilet", price: "Free", accessible: true, confidence: "70% Reliable", lat: 9.9920, lng: 76.2780, status: "Broken / Not Working", updated: "2 hours ago", 
+                id: 5, name: "High Court Junction Public Restroom", type: "toilet", price: "Free", accessible: true, lat: 9.9920, lng: 76.2780, status: "Broken / Not Working", updated: "2 hours ago", 
                 reviews: [{rating: "1 Star", text: "Water supply pipe broken.", img: ""}] 
-            },
-            { 
-                id: 6, name: "Fort Kochi Beach Public Water Fountain", type: "water", price: "Free", accessible: true, confidence: "96% Reliable", lat: 9.9650, lng: 76.2420, status: "Clean & Usable", updated: "1 hour ago", 
-                reviews: [{rating: "5 Stars", text: "Handy near the tourist walking path.", img: ""}] 
-            },
-            { 
-                id: 7, name: "Vyttila Hub Public Sanitation Complex", type: "toilet", price: "Paid (5 INR)", accessible: true, confidence: "94% Reliable", lat: 9.9640, lng: 76.3190, status: "Clean & Usable", updated: "15 mins ago", 
-                reviews: [{rating: "4 Stars", text: "Busy transit point, kept reasonably clean.", img: ""}] 
             }
         ];
 
@@ -458,15 +409,11 @@
                     userMarker = L.marker([lat, lng]).addTo(map).bindPopup("Current GPS Location").openPopup();
                     document.getElementById('reportLocationInput').value = "Current GPS Location (" + lat.toFixed(4) + ", " + lng.toFixed(4) + ")";
                 }, (error) => {
-                    alert("Geolocation error: " + error.message + ". Please ensure location permissions are allowed in your browser.");
+                    alert("Geolocation error: " + error.message);
                 }, { enableHighAccuracy: true, timeout: 10000 });
             } else {
-                alert("Geolocation is not supported by your browser.");
+                alert("Geolocation not supported.");
             }
-        }
-
-        function triggerEmergencySOS() {
-            alert("EMERGENCY SOS: Connecting to nearest municipal assistance helpline and broadcasting accessible transit route.");
         }
 
         function handleImagePreview(event) {
@@ -474,9 +421,7 @@
             if (file) {
                 document.getElementById('imageFileName').innerText = "Attached: " + file.name;
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImageBase64 = e.target.result;
-                };
+                reader.onload = function(e) { uploadedImageBase64 = e.target.result; };
                 reader.readAsDataURL(file);
             }
         }
@@ -488,41 +433,25 @@
 
             dataToRender.forEach(f => {
                 const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${f.lat},${f.lng}`;
-                
                 let reviewsHtml = f.reviews.length > 0 ? f.reviews.map(r => `
-                    <div style="border-top:1px solid #eee; margin-top:5px; padding-top:5px; font-size:11px;">
+                    <div style="border-top:1px solid #eee; margin-top:4px; padding-top:4px; font-size:10px;">
                         <b>${r.rating}</b> - ${r.text}<br>
-                        ${r.img ? `<img src="${r.img}" style="width:75px; height:50px; object-fit:cover; border-radius:4px; margin-top:3px;">` : ''}
+                        ${r.img ? `<img src="${r.img}" style="width:60px; height:40px; object-fit:cover; border-radius:3px; margin-top:2px;">` : ''}
                     </div>
-                `).join('') : '<i style="font-size:11px; color:#888;">No reviews yet</i>';
+                `).join('') : '<i style="font-size:10px; color:#888;">No reviews</i>';
 
                 const marker = L.marker([f.lat, f.lng]).addTo(map)
                     .bindPopup(`
-                        <div style="font-family:sans-serif; min-width:190px; padding:2px;">
-                            <b style="font-size:13px; color:#0f766e; display:block; margin-bottom:3px;">${f.name}</b>
-                            <span style="font-size:11px; color:#475569;">Type: <b>${f.type.toUpperCase()}</b> | Price: ${f.price}</span><br>
-                            <span style="font-size:11px; color:#475569;">Wheelchair Access: <b>${f.accessible ? 'Yes' : 'No'}</b></span><br>
-                            <span style="font-size:11px; color:#475569;">Status: <span style="color:${f.status.includes('Clean') ? '#059669' : '#dc2626'}; font-weight:bold;">${f.status}</span></span><br>
-                            <span style="font-size:10px; color:#94a3b8;">Updated: ${f.updated}</span><br><br>
-                            <b style="font-size:11px; color:#334155;">Reviews & Photos:</b>
-                            <div style="max-height:100px; overflow-y:auto; margin-bottom:6px;">${reviewsHtml}</div>
-                            <a href="${mapsUrl}" target="_blank" style="background:#0d9488; color:white; padding:5px 10px; border-radius:99px; text-decoration:none; font-size:11px; font-weight:bold; display:block; text-align:center;">Get Directions</a>
+                        <div style="font-family:sans-serif; min-width:170px;">
+                            <b style="font-size:12px; color:#0f766e;">${f.name}</b><br>
+                            <span style="font-size:10px;">Type: <b>${f.type.toUpperCase()}</b> | ${f.price}</span><br>
+                            <span style="font-size:10px;">Status: <b style="color:${f.status.includes('Clean') ? 'green' : 'red'};">${f.status}</b></span><br><br>
+                            <div style="max-height:80px; overflow-y:auto;">${reviewsHtml}</div>
+                            <a href="${mapsUrl}" target="_blank" style="background:#0d9488; color:white; padding:3px 8px; border-radius:99px; text-decoration:none; font-size:10px; font-weight:bold; display:block; text-align:center; margin-top:5px;">Get Directions</a>
                         </div>
                     `);
                 markers.push(marker);
             });
-        }
-
-        function filterMarkers(type) {
-            if (type === 'all') {
-                renderMarkers(facilities);
-            } else if (type === 'free') {
-                renderMarkers(facilities.filter(f => f.price.toLowerCase().includes('free')));
-            } else if (type === 'accessible') {
-                renderMarkers(facilities.filter(f => f.accessible === true));
-            } else {
-                renderMarkers(facilities.filter(f => f.type === type));
-            }
         }
 
         function handleSearch() {
@@ -542,17 +471,9 @@
             let targetFacility = facilities.find(f => f.name.toLowerCase() === locationName.toLowerCase());
             if (!targetFacility) {
                 targetFacility = {
-                    id: facilities.length + 1,
-                    name: locationName,
-                    type: "toilet",
-                    price: "Free",
-                    accessible: true,
-                    confidence: "95% Reliable",
-                    lat: 9.9816 + (Math.random() - 0.5) * 0.03,
-                    lng: 76.2998 + (Math.random() - 0.5) * 0.03,
-                    status: status,
-                    updated: "Just now",
-                    reviews: []
+                    id: facilities.length + 1, name: locationName, type: "toilet", price: "Free", accessible: true,
+                    lat: 9.9816 + (Math.random() - 0.5) * 0.03, lng: 76.2998 + (Math.random() - 0.5) * 0.03,
+                    status: status, updated: "Just now", reviews: []
                 };
                 facilities.push(targetFacility);
             }
@@ -565,12 +486,11 @@
 
             renderMarkers(facilities);
 
-            // Generates a ticket and routes a simulated issue to the responsible local body[cite: 1]
             userTickets.unshift({ id: ticketId, facility: locationName, status: status, route: "Routed to Ward 4 Municipal Officer" });
             renderTickets();
 
-            document.getElementById('reportSuccess').innerText = `Ticket #${ticketId} generated & routed successfully to local body[cite: 1]!`;
-            setTimeout(() => document.getElementById('reportSuccess').innerText = '', 5000);
+            document.getElementById('reportSuccess').innerText = `Ticket #${ticketId} routed to local body[cite: 1]!`;
+            setTimeout(() => document.getElementById('reportSuccess').innerText = '', 4000);
             
             uploadedImageBase64 = '';
             document.getElementById('imageFileName').innerText = '';
@@ -580,35 +500,27 @@
         function renderTickets() {
             const container = document.getElementById('ticketTrackerList');
             if (userTickets.length === 0) {
-                container.innerHTML = `<p class="text-slate-400 italic text-center py-2 text-xs">No reports sent yet.</p>`;
+                container.innerHTML = `<p class="text-slate-400 italic text-center text-xs">No tickets generated.</p>`;
                 return;
             }
 
             container.innerHTML = userTickets.map(t => `
-                <div class="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1 shadow-sm">
-                    <div class="flex justify-between font-black text-xs">
+                <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
+                    <div class="flex justify-between font-bold">
                         <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}[cite: 1]</span>
-                        <span class="text-emerald-600 font-bold">${t.status}</span>
+                        <span class="text-emerald-600">${t.status}</span>
                     </div>
-                    <p class="text-slate-700 dark:text-slate-200 font-semibold text-xs">${t.facility}</p>
-                    <p class="text-[10px] text-emerald-600 font-bold">✓ Simulated issue routed to local body[cite: 1]: ${t.route}</p>
+                    <p class="text-slate-600 dark:text-slate-300 truncate">${t.facility}</p>
+                    <p class="text-[9px] text-emerald-600 font-semibold">✓ Routed to local body[cite: 1]</p>
                 </div>
             `).join('');
         }
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function toggleProfileModal(show) {
             const modal = document.getElementById('profileModal');
-            if (show) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
+            if (show) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+            else { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
     </script>
 </body>
