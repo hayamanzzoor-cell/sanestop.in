@@ -93,7 +93,9 @@
         <!-- Top Navigation Bar -->
         <header class="h-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl shadow-sm px-4 md:px-8 flex items-center justify-between z-50 border-b border-slate-200/60 dark:border-slate-800/60 flex-shrink-0">
             <div class="flex items-center space-x-3.5">
-                <button onclick="goBackToWelcome()" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">← Back</button>
+                <button onclick="goBackToWelcome()" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center space-x-1">
+                    <span>← Back</span>
+                </button>
                 <div>
                     <span class="text-xl font-black tracking-tight bg-gradient-to-r from-blue-600 to-teal-500 dark:from-blue-400 dark:to-teal-400 bg-clip-text text-transparent">Sane-Stop</span>
                     <span class="block text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">Public Welfare & Access Finder</span>
@@ -282,7 +284,6 @@
         };
 
         window.onload = function() {
-            // Check local storage for persistent session
             const savedUser = localStorage.getItem('saneStopUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -292,7 +293,6 @@
                 document.getElementById('profileWardDisplay').innerText = currentUser.ward;
                 setTimeout(() => initMap(), 150);
             } else {
-                // Pre-fill remembered email/password if any
                 const rememberedEmail = localStorage.getItem('saneStopEmail');
                 const rememberedPass = localStorage.getItem('saneStopPass');
                 if (rememberedEmail) document.getElementById('authEmail').value = rememberedEmail;
@@ -340,7 +340,6 @@
                 document.getElementById('profileCreationView').classList.remove('hidden');
                 document.getElementById('profileDisplayName').value = nameInput || "Citizen User";
             } else {
-                // Direct login
                 currentUser = { name: "Registered User", email: email, ward: "Ward 4 - Central Zone" };
                 localStorage.setItem('saneStopUser', JSON.stringify(currentUser));
                 document.getElementById('authView').classList.add('hidden');
@@ -370,8 +369,16 @@
         }
 
         function goBackToWelcome() {
+            // Completely hide app view and show auth login screen
             document.getElementById('appView').classList.add('hidden');
+            document.getElementById('profileCreationView').classList.add('hidden');
             document.getElementById('authView').classList.remove('hidden');
+            
+            // Reload remembered email/password values into fields
+            const rememberedEmail = localStorage.getItem('saneStopEmail');
+            const rememberedPass = localStorage.getItem('saneStopPass');
+            if (rememberedEmail) document.getElementById('authEmail').value = rememberedEmail;
+            if (rememberedPass) document.getElementById('authPassword').value = rememberedPass;
         }
 
         function changeLanguage(lang) {
@@ -555,7 +562,6 @@
 
             renderMarkers(facilities);
 
-            // Generates a ticket and routes a simulated issue to the responsible local body[cite: 1]
             userTickets.unshift({ id: ticketId, facility: locationName, status: status, route: "Routed to Ward 4 Municipal Officer" });
             renderTickets();
 
