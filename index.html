@@ -17,7 +17,6 @@
                     },
                     boxShadow: {
                         'glow': '0 0 35px -5px rgba(20, 184, 166, 0.5)',
-                        'glow-blue': '0 0 35px -5px rgba(59, 130, 246, 0.5)',
                     }
                 }
             }
@@ -45,11 +44,11 @@
             </div>
 
             <div class="flex bg-black/20 p-1.5 rounded-2xl">
-                <button onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white/20 text-white transition-all shadow-sm">Login</button>
-                <button onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-400 transition-all">Sign Up</button>
+                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white/20 text-white transition-all shadow-sm">Login</button>
+                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-400 transition-all">Sign Up</button>
             </div>
 
-            <form onsubmit="handleAuth(event)" class="space-y-4">
+            <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
                 <div id="nameFieldContainer" class="hidden space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Full Name</label>
                     <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
@@ -69,10 +68,11 @@
         </div>
     </div>
 
-    <!-- PROFILE CREATION VIEW -->
+    <!-- PROFILE CREATION VIEW (First time sign up only) -->
     <div id="profileCreationView" class="hidden min-h-screen flex flex-col items-center justify-center p-6 bg-slate-950">
         <div class="bg-slate-900 p-8 rounded-4xl shadow-2xl w-full max-w-md border border-slate-800 space-y-6">
             <h2 class="text-xl font-black text-white">Create Your Citizen Profile</h2>
+            <p class="text-xs text-slate-400">This is a one-time profile setup required for municipal issue routing.</p>
             <form onsubmit="handleProfileCreation(event)" class="space-y-4">
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-400">Public Display Name</label>
@@ -83,7 +83,7 @@
                     <input type="text" id="profileWard" required value="Ward 4 - Central Zone" class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
                 </div>
                 <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-teal-500 to-blue-600 text-white font-bold text-xs uppercase rounded-2xl shadow-lg shadow-teal-500/20 transition-all">
-                    Complete Setup
+                    Complete Setup & Enter App
                 </button>
             </form>
         </div>
@@ -120,7 +120,6 @@
 
                 <button onclick="toggleDarkMode()" class="px-3.5 py-2 rounded-full bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-xs font-bold hover:scale-105 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">Theme</button>
                 
-                <!-- NEW NEXT-LEVEL PROFILE BUTTON -->
                 <button onclick="toggleProfileModal(true)" class="group flex items-center space-x-2 bg-gradient-to-r from-teal-500/15 to-blue-500/15 hover:from-teal-500/25 hover:to-blue-500/25 px-4 py-2 rounded-full border border-teal-500/30 transition-all shadow-glow hover:scale-105 active:scale-95">
                     <div class="relative">
                         <div class="w-7 h-7 bg-gradient-to-tr from-teal-500 to-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-md">SS</div>
