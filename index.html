@@ -16,8 +16,8 @@
                         '4xl': '2.5rem',
                     },
                     boxShadow: {
-                        'airbnb': '0 6px 20px rgba(0, 0, 0, 0.08)',
-                        'airbnb-hover': '0 10px 25px rgba(0, 0, 0, 0.12)',
+                        'airbnb': '0 8px 30px rgba(0, 0, 0, 0.12)',
+                        'sheet': '0 -10px 25px rgba(0, 0, 0, 0.1)',
                     }
                 }
             }
@@ -26,40 +26,40 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        #map { height: 100vh; width: 100%; z-index: 1; }
+        .map-canvas { height: 100vh; width: 100%; z-index: 1; }
         .dark .leaflet-tile-pane { filter: brightness(0.6) contrast(1.3) saturate(1.2); }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 9999px; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-900 font-sans transition-colors duration-500 overflow-x-hidden">
+<body class="bg-slate-900 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-500 overflow-x-hidden">
 
     <!-- LOGIN / SIGNUP VIEW -->
-    <div id="authView" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative">
-        <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 dark:border-slate-800 space-y-6">
+    <div id="authView" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative z-50">
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-4xl shadow-2xl w-full max-w-md border border-slate-100 dark:border-slate-800 space-y-6">
             <div class="text-center space-y-1">
-                <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Sane-Stop</h1>
+                <h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Sane-Stop</h1>
                 <p class="text-xs text-slate-500 uppercase tracking-widest font-semibold">Secure Municipal Gateway</p>
             </div>
 
-            <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
-                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all">Login</button>
-                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2 rounded-xl text-xs font-bold text-slate-500 transition-all">Sign Up</button>
+            <div class="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl">
+                <button type="button" onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all">Login</button>
+                <button type="button" onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-500 transition-all">Sign Up</button>
             </div>
 
             <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
                 <div id="nameFieldContainer" class="hidden space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Full Name</label>
-                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none">
                 </div>
                 <div class="space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Email Address</label>
-                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none">
                 </div>
                 <div class="space-y-1">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Password</label>
-                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none">
                 </div>
                 <button type="submit" id="authSubmitBtn" class="w-full py-3.5 bg-slate-900 dark:bg-teal-600 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-lg transition-all">
                     Login to Portal
@@ -69,8 +69,8 @@
     </div>
 
     <!-- PROFILE CREATION VIEW -->
-    <div id="profileCreationView" class="hidden min-h-screen flex flex-col items-center justify-center p-6 bg-slate-950">
-        <div class="bg-slate-900 p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-800 space-y-6">
+    <div id="profileCreationView" class="hidden min-h-screen flex flex-col items-center justify-center p-6 bg-slate-950 z-50 relative">
+        <div class="bg-slate-900 p-8 rounded-4xl shadow-2xl w-full max-w-md border border-slate-800 space-y-6">
             <h2 class="text-xl font-black text-white">Create Your Citizen Profile</h2>
             <p class="text-xs text-slate-400">One-time setup required for municipal issue routing.</p>
             <form onsubmit="handleProfileCreation(event)" class="space-y-4">
@@ -89,65 +89,106 @@
         </div>
     </div>
 
-    <!-- MAIN APP DASHBOARD (Airbnb-Style Floating Header & Categories) -->
-    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-900 text-slate-900 relative">
+    <!-- MAIN APP DASHBOARD -->
+    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-900 relative">
         
-        <!-- FULL SCREEN MAP CANVAS -->
+        <!-- MAP CANVAS -->
         <div class="absolute inset-0 z-0">
-            <div id="map" class="w-full h-full"></div>
+            <div id="map" class="map-canvas"></div>
         </div>
 
-        <!-- AIRBNB-STYLE FLOATING HEADER & CATEGORY CHIPS BAR -->
-        <div class="absolute top-4 inset-x-4 md:inset-x-8 z-20 space-y-3 pointer-events-none max-w-5xl mx-auto">
-            
-            <!-- Top Search & Navigation Pill -->
-            <div class="bg-white dark:bg-slate-900 backdrop-blur-xl px-4 py-3 rounded-full shadow-airbnb border border-slate-200/80 dark:border-slate-800 flex items-center justify-between pointer-events-auto">
-                <div class="flex items-center space-x-3 flex-1">
-                    <button type="button" onclick="goBackToWelcome()" class="text-xs font-extrabold text-slate-700 dark:text-slate-300 hover:text-slate-900">Back</button>
-                    <div class="h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
-                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facilities..." class="w-full bg-transparent text-xs outline-none font-semibold text-slate-900 dark:text-white">
+        <!-- ==================== DESKTOP VIEW (Floating GIS Card UI) ==================== -->
+        <div class="hidden md:block">
+            <!-- Top Nav -->
+            <header class="absolute top-4 right-8 z-30 flex items-center space-x-3 pointer-events-auto">
+                <button type="button" onclick="goBackToWelcome()" class="px-4 py-2 rounded-full bg-white dark:bg-slate-900 text-xs font-extrabold shadow-airbnb border border-slate-200 dark:border-slate-800">Back</button>
+                <button type="button" onclick="toggleDarkMode()" class="px-4 py-2 rounded-full bg-white dark:bg-slate-900 text-xs font-extrabold shadow-airbnb border border-slate-200 dark:border-slate-800">Theme</button>
+                <button type="button" onclick="toggleProfileModal(true)" class="px-5 py-2 rounded-full bg-slate-900 dark:bg-teal-600 text-white text-xs font-extrabold shadow-airbnb" id="navProfileTextDesktop">Profile</button>
+            </header>
+
+            <!-- Floating Left Panel -->
+            <div class="absolute top-4 left-8 z-20 w-80 max-h-[calc(100vh-2rem)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-airbnb border border-slate-200/80 dark:border-slate-800 p-5 overflow-y-auto space-y-4 pointer-events-auto">
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <span class="text-xs font-black uppercase tracking-wider text-slate-500">Sane-Stop GIS Portal</span>
+                    <button type="button" onclick="panToUserLocation()" class="text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline">GPS Near Me</button>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button type="button" onclick="panToUserLocation()" class="px-3.5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-extrabold text-slate-800 dark:text-slate-200 hover:shadow-sm transition-all">GPS Near Me</button>
-                    <button type="button" onclick="toggleProfileModal(true)" class="px-4 py-2 rounded-full bg-slate-900 dark:bg-teal-600 text-white text-xs font-extrabold shadow-sm" id="navProfileText">Profile</button>
+
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Search & Filter</label>
+                    <input type="text" id="desktopSearchInput" oninput="handleSearch(this.value)" placeholder="Search facilities..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs outline-none border border-slate-200 dark:border-slate-700 mb-2">
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button type="button" onclick="filterMarkers('all', this)" class="desktop-filter py-2 px-3 rounded-xl text-xs font-bold bg-slate-900 dark:bg-teal-600 text-white shadow-sm">All Services</button>
+                        <button type="button" onclick="filterMarkers('toilet', this)" class="desktop-filter py-2 px-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Toilets</button>
+                        <button type="button" onclick="filterMarkers('water', this)" class="desktop-filter py-2 px-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Water</button>
+                        <button type="button" onclick="filterMarkers('free', this)" class="desktop-filter py-2 px-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Free Only</button>
+                        <button type="button" onclick="filterMarkers('accessible', this)" class="desktop-filter col-span-2 py-2 px-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Wheelchair Accessible</button>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 dark:border-slate-800">
+
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Active Municipal Tickets</label>
+                    <div id="desktopTicketList" class="space-y-1.5 text-xs max-h-40 overflow-y-auto">
+                        <p class="text-slate-400 italic text-center text-xs py-2">No tickets generated.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MOBILE VIEW (Airbnb-Style Flawless UI) ==================== -->
+        <div class="block md:hidden">
+            <!-- Floating Top Search & Airbnb Category Chips Bar -->
+            <div class="absolute top-4 inset-x-4 z-30 space-y-2 pointer-events-none">
+                <!-- Search & Actions Top Pill -->
+                <div class="bg-white dark:bg-slate-900 backdrop-blur-xl px-4 py-3 rounded-full shadow-airbnb border border-slate-200/80 dark:border-slate-800 flex items-center justify-between pointer-events-auto">
+                    <div class="flex items-center space-x-2 flex-1 mr-2">
+                        <button type="button" onclick="goBackToWelcome()" class="text-xs font-extrabold text-slate-700 dark:text-slate-300">←</button>
+                        <input type="text" id="mobileSearchInput" oninput="handleSearch(this.value)" placeholder="Search facilities..." class="w-full bg-transparent text-xs outline-none font-semibold text-slate-900 dark:text-white px-1">
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button type="button" onclick="panToUserLocation()" class="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[11px] font-extrabold text-slate-800 dark:text-slate-200">Near Me</button>
+                        <button type="button" onclick="toggleProfileModal(true)" class="px-3.5 py-1.5 rounded-full bg-slate-900 dark:bg-teal-600 text-white text-[11px] font-extrabold" id="navProfileTextMobile">Profile</button>
+                    </div>
+                </div>
+
+                <!-- Airbnb Horizontal Scrollable Category Chips -->
+                <div class="flex items-center space-x-2 overflow-x-auto pb-1 pointer-events-auto no-scrollbar px-1">
+                    <button type="button" onclick="filterMarkers('all', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-slate-900 dark:bg-teal-600 text-white shadow-airbnb whitespace-nowrap transition-all">All</button>
+                    <button type="button" onclick="filterMarkers('toilet', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap transition-all">Toilets</button>
+                    <button type="button" onclick="filterMarkers('water', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap transition-all">Water</button>
+                    <button type="button" onclick="filterMarkers('free', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap transition-all">Free Only</button>
+                    <button type="button" onclick="filterMarkers('accessible', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap transition-all">Accessible</button>
                 </div>
             </div>
 
-            <!-- Airbnb-Style Horizontal Scrollable Category Chips -->
-            <div class="flex items-center space-x-3 overflow-x-auto pb-2 pointer-events-auto no-scrollbar px-1">
-                <button type="button" onclick="filterMarkers('all')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-slate-900 dark:bg-teal-600 text-white shadow-airbnb whitespace-nowrap transition-all" id="filterAll">All Services</button>
-                <button type="button" onclick="filterMarkers('toilet')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterToilet">Toilets</button>
-                <button type="button" onclick="filterMarkers('water')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterWater">Water Points</button>
-                <button type="button" onclick="filterMarkers('free')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterFree">Free Only</button>
-                <button type="button" onclick="filterMarkers('accessible')" class="filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all" id="filterAccessible">Wheelchair Accessible</button>
+            <!-- Floating Bottom Sheet for Mobile Tickets -->
+            <div class="absolute bottom-4 inset-x-4 z-30 pointer-events-none">
+                <div class="bg-white dark:bg-slate-900 backdrop-blur-xl p-3.5 rounded-3xl shadow-sheet border border-slate-200/80 dark:border-slate-800 max-h-32 overflow-y-auto pointer-events-auto space-y-1.5">
+                    <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Active Municipal Tickets</span>
+                        <button type="button" onclick="toggleDarkMode()" class="underline text-slate-600 dark:text-slate-400">Theme</button>
+                    </div>
+                    <div id="mobileTicketList" class="space-y-1 text-xs">
+                        <p class="text-slate-400 italic text-center text-xs py-1">No tickets generated.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- FLOATING BOTTOM TICKET TRACKER TILE -->
-        <div class="absolute bottom-6 inset-x-4 md:right-8 md:left-auto md:w-80 z-20 pointer-events-none">
-            <div class="bg-white dark:bg-slate-900 backdrop-blur-xl p-4 rounded-3xl shadow-airbnb border border-slate-200/80 dark:border-slate-800 max-h-40 overflow-y-auto pointer-events-auto space-y-2">
-                <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    <span id="ticketsTitle">Active Municipal Tickets</span>
-                    <button type="button" onclick="toggleDarkMode()" class="text-[10px] underline font-semibold text-slate-600 dark:text-slate-400">Toggle Theme</button>
-                </div>
-                <div id="ticketTrackerList" class="space-y-1.5 text-xs">
-                    <p class="text-slate-400 italic text-center text-xs py-1" id="noTicketsText">No tickets generated.</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- USER PROFILE MODAL -->
     <div id="profileModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md p-6 border border-slate-100 dark:border-slate-800 space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                <h2 class="text-base font-bold text-slate-900 dark:text-white" id="profileModalTitle">My Profile & Credentials</h2>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white">My Profile & Credentials</h2>
                 <button type="button" onclick="toggleProfileModal(false)" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-xs">✕</button>
             </div>
             <div class="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                 <p><strong>Name:</strong> <span id="profileNameDisplay">Citizen User</span></p>
-                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span></p>
-                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly.</p>
+                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span>[cite: 1]</p>
+                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly[cite: 1].</p>
             </div>
             <button type="button" onclick="handleLogout()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-sm transition-all">Logout</button>
         </div>
@@ -158,41 +199,14 @@
     <script>
         let map, markers = [], satelliteLayer, userMarker;
         let userTickets = [];
-        let currentLang = 'en';
         let currentUser = null;
-
-        const translations = {
-            en: {
-                navProfile: "Profile",
-                all: "All Services", toilets: "Toilets", water: "Water Points", free: "Free Only", accessible: "Wheelchair Accessible",
-                ticketsTitle: "Active Municipal Tickets", noTickets: "No tickets generated.",
-                profileTitle: "My Profile & Credentials"
-            },
-            ml: {
-                navProfile: "പ്രൊഫൈൽ",
-                all: "എല്ലാ സേവനങ്ങളും", toilets: "ടോയ്‌ലറ്റ്", water: "വെള്ളം", free: "സൗജന്യം മാത്രം", accessible: "ഭിന്നശേഷി സൗഹൃദം",
-                ticketsTitle: "സജീവമായ ടിക്കറ്റുകൾ", noTickets: "ടിക്കറ്റുകൾ ഒന്നുമില്ല.",
-                profileTitle: "പ്രൊഫൈൽ"
-            },
-            hi: {
-                navProfile: "प्रोफ़ाइल",
-                all: "सभी सेवाएं", toilets: "शौचालय", water: "पानी", free: "केवल मुफ़्त", accessible: "सुलभ",
-                ticketsTitle: "सक्रिय टिकट", noTickets: "कोई टिकट नहीं.",
-                profileTitle: "यूजर प्रोफाइल"
-            },
-            ta: {
-                navProfile: "சுயவிவரம்",
-                all: "அனைத்து சேவைகள்", toilets: "கழிப்பறை", water: "நீர்", free: "இலவசம் மட்டும்", accessible: "அணுகக்கூடியது",
-                ticketsTitle: "செயலில் உள்ள டிக்கெட்டுகள்", noTickets: "டிக்கெட்டுகள் இல்லை.",
-                profileTitle: "சுயவிவரம்"
-            }
-        };
 
         window.onload = function() {
             const savedUser = localStorage.getItem('saneStopUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 document.getElementById('authView').classList.add('hidden');
+                document.getElementById('profileCreationView').classList.add('hidden');
                 document.getElementById('appView').classList.remove('hidden');
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileWardDisplay').innerText = currentUser.ward;
@@ -212,13 +226,13 @@
             const submitBtn = document.getElementById('authSubmitBtn');
 
             if (tab === 'signup') {
-                signupBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
-                loginBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold text-slate-500 transition-all";
+                signupBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
+                loginBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-500 transition-all";
                 nameField.classList.remove('hidden');
                 submitBtn.innerText = "Register Account";
             } else {
-                loginBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
-                signupBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold text-slate-500 transition-all";
+                loginBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
+                signupBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-500 transition-all";
                 nameField.classList.add('hidden');
                 submitBtn.innerText = "Login to Portal";
             }
@@ -280,19 +294,13 @@
             if (rememberedPass) document.getElementById('authPassword').value = rememberedPass;
         }
 
-        function changeLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-            document.getElementById('navProfileText').innerText = t.navProfile;
-            document.getElementById('ticketsTitle').innerText = t.ticketsTitle;
-            document.getElementById('noTicketsText').innerText = t.noTickets;
-        }
-
-        function filterMarkers(type) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap hover:border-slate-400 transition-all";
+        function filterMarkers(type, btn) {
+            document.querySelectorAll('.mobile-filter, .desktop-filter').forEach(b => {
+                b.className = b.className.replace('bg-slate-900 dark:bg-teal-600 text-white', 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-800');
             });
-            event.target.className = "filter-btn px-5 py-2.5 rounded-full text-xs font-extrabold bg-slate-900 dark:bg-teal-600 text-white shadow-airbnb whitespace-nowrap transition-all";
+            if (btn) {
+                btn.className = btn.className.replace('bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-800', 'bg-slate-900 dark:bg-teal-600 text-white');
+            }
 
             if (type === 'all') {
                 renderMarkers(facilities);
@@ -419,28 +427,27 @@
             }
         }
 
-        function handleSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = facilities.filter(f => f.name.toLowerCase().includes(query) || f.type.toLowerCase().includes(query));
+        function handleSearch(query) {
+            const q = query.toLowerCase();
+            const filtered = facilities.filter(f => f.name.toLowerCase().includes(q) || f.type.toLowerCase().includes(q));
             renderMarkers(filtered);
         }
 
         function renderTickets() {
-            const container = document.getElementById('ticketTrackerList');
-            if (userTickets.length === 0) {
-                container.innerHTML = `<p class="text-slate-400 italic text-center text-xs">No tickets generated.</p>`;
-                return;
-            }
-
-            container.innerHTML = userTickets.map(t => `
-                <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
-                    <div class="flex justify-between font-bold text-[10px]">
-                        <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}</span>
-                        <span class="text-emerald-600">${t.status}</span>
+            const containerHtml = userTickets.length === 0 ? 
+                `<p class="text-slate-400 italic text-center text-xs py-1">No tickets generated.</p>` :
+                userTickets.map(t => `
+                    <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
+                        <div class="flex justify-between font-bold text-[10px]">
+                            <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}[cite: 1]</span>
+                            <span class="text-emerald-600">${t.status}</span>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-300 truncate text-[10px]">${t.facility}</p>
                     </div>
-                    <p class="text-slate-600 dark:text-slate-300 truncate text-[10px]">${t.facility}</p>
-                </div>
-            `).join('');
+                `).join('');
+
+            document.getElementById('desktopTicketList').innerHTML = containerHtml;
+            document.getElementById('mobileTicketList').innerHTML = containerHtml;
         }
 
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
