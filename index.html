@@ -27,7 +27,7 @@
     <style>
         #map { height: calc(100vh - 4.5rem); width: 100%; z-index: 1; }
         .dark .leaflet-tile-pane { filter: brightness(0.6) contrast(1.3) saturate(1.2); }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 9999px; }
     </style>
@@ -39,7 +39,7 @@
         <div class="bg-white/10 dark:bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/10 space-y-6">
             <div class="text-center space-y-2">
                 <h1 class="text-3xl font-black tracking-tight text-white">Sane-Stop</h1>
-                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold">GIS Municipal Gateway</p>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Secure Municipal Gateway</p>
             </div>
 
             <div class="flex bg-black/20 p-1 rounded-xl">
@@ -91,13 +91,13 @@
     <!-- MAIN APP DASHBOARD -->
     <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
         
-        <!-- TOP GIS NAVIGATION BAR -->
+        <!-- TOP NAVIGATION BAR -->
         <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 flex items-center justify-between z-30 flex-shrink-0 shadow-sm">
             <div class="flex items-center space-x-3">
-                <button type="button" onclick="goBackToWelcome()" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">← Back</button>
+                <button type="button" onclick="goBackToWelcome()" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Back</button>
                 <div class="flex items-center space-x-2 border-l border-slate-200 dark:border-slate-800 pl-3">
                     <span class="w-3 h-3 rounded-full bg-teal-500"></span>
-                    <span class="text-sm font-bold tracking-tight">Kochi Region / Sane-Stop GIS Portal</span>
+                    <span class="text-sm font-bold tracking-tight">Sane-Stop GIS Portal</span>
                 </div>
             </div>
 
@@ -116,74 +116,32 @@
             </div>
         </header>
 
-        <!-- MAP CONTAINER WITH FLOATING DESKTOP PANEL -->
+        <!-- MAP CONTAINER WITH COMPACT FLOATING TILE PANEL -->
         <div class="flex-1 relative">
             <div id="map" class="w-full h-full"></div>
 
-            <!-- FLOATING LAYER/CONTROL PANEL -->
-            <div class="absolute top-4 left-4 z-20 w-80 max-h-[calc(100vh-6rem)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-card border border-slate-200 dark:border-slate-800 p-4 overflow-y-auto space-y-4">
+            <!-- COMPACT FLOATING TILE PANEL (Non-intrusive on map) -->
+            <div class="absolute top-4 left-4 z-20 w-72 md:w-80 max-h-[calc(100vh-5.5rem)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-card border border-slate-200 dark:border-slate-800 p-3.5 overflow-y-auto space-y-3">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Layer & Actions</span>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500" id="panelTitle">Quick Filters</span>
                     <button type="button" onclick="panToUserLocation()" class="text-[11px] font-bold text-teal-600 dark:text-teal-400 hover:underline">GPS Near Me</button>
                 </div>
 
-                <!-- Quick Filters -->
-                <div class="space-y-1.5">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter View</label>
-                    <div class="grid grid-cols-2 gap-1.5">
-                        <button type="button" onclick="filterMarkers('all')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-teal-600 text-white shadow-sm" id="filterAll">All Services</button>
-                        <button type="button" onclick="filterMarkers('toilet')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterToilet">Toilets</button>
-                        <button type="button" onclick="filterMarkers('water')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterWater">Water Points</button>
-                        <button type="button" onclick="filterMarkers('free')" class="filter-btn py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterFree">Free Only</button>
-                        <button type="button" onclick="filterMarkers('accessible')" class="filter-btn col-span-2 py-1.5 px-3 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterAccessible">Wheelchair Accessible</button>
-                    </div>
-                </div>
-
-                <hr class="border-slate-100 dark:border-slate-800">
-
-                <!-- Report Form -->
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400" id="reportTitle">Report Condition & Route Ticket</label>
-                    <form onsubmit="handleReport(event)" class="space-y-2">
-                        <input type="text" id="reportLocationInput" required placeholder="Facility name..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs outline-none">
-                        
-                        <select id="reportStatus" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold outline-none">
-                            <option value="Broken / Not Working">Broken / Not Working</option>
-                            <option value="Closed">Closed</option>
-                            <option value="Dirty / Uncleaned">Dirty / Uncleaned</option>
-                            <option value="Foul Smell">Foul Smell</option>
-                            <option value="Clean & Usable">Clean & Usable</option>
-                        </select>
-
-                        <textarea id="reviewText" placeholder="Add review notes..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs outline-none h-14 resize-none"></textarea>
-                        
-                        <div class="flex items-center justify-between text-xs px-1">
-                            <select id="starRating" class="bg-transparent font-bold text-amber-500 outline-none text-xs">
-                                <option value="5 Stars">5 Stars</option>
-                                <option value="4 Stars">4 Stars</option>
-                                <option value="3 Stars">3 Stars</option>
-                                <option value="2 Stars">2 Stars</option>
-                                <option value="1 Star">1 Star</option>
-                            </select>
-                            <label class="cursor-pointer text-teal-600 font-bold hover:underline text-xs">
-                                Add Photo <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handleImagePreview(event)">
-                            </label>
-                        </div>
-                        <div id="imageFileName" class="text-[10px] text-teal-500 font-bold"></div>
-
-                        <button type="submit" id="submitReportBtn" class="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm">
-                            Submit & Route to Local Body
-                        </button>
-                    </form>
-                    <div id="reportSuccess" class="text-[11px] text-teal-600 font-bold text-center"></div>
+                <!-- Compact Filter Buttons -->
+                <div class="grid grid-cols-2 gap-1.5">
+                    <button type="button" onclick="filterMarkers('all')" class="py-1.5 px-2.5 rounded-lg text-[11px] font-bold bg-teal-600 text-white shadow-sm" id="filterAll">All Services</button>
+                    <button type="button" onclick="filterMarkers('toilet')" class="py-1.5 px-2.5 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterToilet">Toilets</button>
+                    <button type="button" onclick="filterMarkers('water')" class="py-1.5 px-2.5 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterWater">Water Points</button>
+                    <button type="button" onclick="filterMarkers('free')" class="py-1.5 px-2.5 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterFree">Free Only</button>
+                    <button type="button" onclick="filterMarkers('accessible')" class="col-span-2 py-1.5 px-2.5 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="filterAccessible">Wheelchair Accessible</button>
                 </div>
 
                 <hr class="border-slate-100 dark:border-slate-800">
 
                 <!-- Municipal Tickets Tracker -->
-                <div class="space-y-1.5">
+                <div class="space-y-1">
                     <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400" id="ticketsTitle">Active Municipal Tickets</label>
-                    <div id="ticketTrackerList" class="space-y-1.5 text-xs max-h-36 overflow-y-auto">
+                    <div id="ticketTrackerList" class="space-y-1 text-xs max-h-32 overflow-y-auto">
                         <p class="text-slate-400 italic text-center text-xs" id="noTicketsText">No tickets generated.</p>
                     </div>
                 </div>
@@ -214,34 +172,29 @@
         let userTickets = [];
         let currentLang = 'en';
         let currentUser = null;
-        let uploadedImageBase64 = '';
 
         const translations = {
             en: {
-                navProfile: "Profile", filters: "Layer & Actions",
+                navProfile: "Profile", panelTitle: "Quick Filters",
                 all: "All Services", toilets: "Toilets", water: "Water Points", free: "Free Only", accessible: "Wheelchair Accessible",
-                reportTitle: "Report Condition & Route Ticket", submitReport: "Submit & Route to Local Body",
                 ticketsTitle: "Active Municipal Tickets", noTickets: "No tickets generated.",
                 profileTitle: "My Profile & Credentials"
             },
             ml: {
-                navProfile: "പ്രൊഫൈൽ", filters: "ലെയർ & ആക്ഷൻസ്",
+                navProfile: "പ്രൊഫൈൽ", panelTitle: "വേഗത്തിലുള്ള ഫിൽട്ടറുകൾ",
                 all: "എല്ലാ സേവനങ്ങളും", toilets: "ടോയ്‌ലറ്റ്", water: "വെള്ളം", free: "സൗജന്യം മാത്രം", accessible: "ഭിന്നശേഷി സൗഹൃദം",
-                reportTitle: "പ്രശ്നം റിപ്പോർട്ട് ചെയ്യുക", submitReport: "മുനിസിപ്പാലിറ്റിയിലേക്ക് അയക്കുക",
                 ticketsTitle: "സജീവമായ ടിക്കറ്റുകൾ", noTickets: "ടിക്കറ്റുകൾ ഒന്നുമില്ല.",
                 profileTitle: "പ്രൊഫൈൽ"
             },
             hi: {
-                navProfile: "प्रोफ़ाइल", filters: "लेयर और एक्शन",
+                navProfile: "प्रोफ़ाइल", panelTitle: "त्वरित फ़िल्टर",
                 all: "सभी सेवाएं", toilets: "शौचालय", water: "पानी", free: "केवल मुफ़्त", accessible: "सुलभ",
-                reportTitle: "समस्या रिपोर्ट करें और टिकट भेजें", submitReport: "नगर निकाय को भेजें",
                 ticketsTitle: "सक्रिय टिकट", noTickets: "कोई टिकट नहीं.",
                 profileTitle: "यूजर प्रोफाइल"
             },
             ta: {
-                navProfile: "சுயவிவரம்", filters: "அடுக்கு & செயல்பாடுகள்",
+                navProfile: "சுயவிவரம்", panelTitle: "விரைவு வடிகட்டிகள்",
                 all: "அனைத்து சேவைகள்", toilets: "கழிப்பறை", water: "நீர்", free: "இலவசம் மட்டும்", accessible: "அணுகக்கூடியது",
-                reportTitle: "சிக்கலைப் புகாரளி", submitReport: "நகராட்சிக்கு அனுப்பவும்",
                 ticketsTitle: "செயலில் உள்ள டிக்கெட்டுகள்", noTickets: "டிக்கெட்டுகள் இல்லை.",
                 profileTitle: "சுயவிவரம்"
             }
@@ -343,8 +296,7 @@
             currentLang = lang;
             const t = translations[lang];
             document.getElementById('navProfileText').innerText = t.navProfile;
-            document.getElementById('reportTitle').innerText = t.reportTitle;
-            document.getElementById('submitReportBtn').innerText = t.submitReport;
+            document.getElementById('panelTitle').innerText = t.panelTitle;
             document.getElementById('ticketsTitle').innerText = t.ticketsTitle;
             document.getElementById('noTicketsText').innerText = t.noTickets;
         }
@@ -361,18 +313,19 @@
             }
         }
 
+        // Facilities Dataset
         const facilities = [
             { 
                 id: 1, name: "Ernakulam Central KSRTC Bus Terminal Restroom", type: "toilet", price: "Free", accessible: true, lat: 9.9816, lng: 76.2998, status: "Clean & Usable", updated: "10 mins ago", 
-                reviews: [{rating: "5 Stars", text: "Spacious and well maintained.", img: ""}] 
+                reviews: [{rating: "5 Stars", text: "Spacious and well maintained."}] 
             },
             { 
                 id: 2, name: "MG Road Metro Station Drinking Water Kiosk", type: "water", price: "Free", accessible: true, lat: 9.9750, lng: 76.2853, status: "Clean & Usable", updated: "25 mins ago", 
-                reviews: [{rating: "4 Stars", text: "Cold RO water available.", img: ""}] 
+                reviews: [{rating: "4 Stars", text: "Cold RO water available."}] 
             },
             { 
                 id: 3, name: "Marine Drive Walkway Public Restroom", type: "toilet", price: "Paid (5 INR)", accessible: true, lat: 9.9890, lng: 76.2790, status: "Clean & Usable", updated: "5 mins ago", 
-                reviews: [{rating: "5 Stars", text: "Very clean facilities.", img: ""}] 
+                reviews: [{rating: "5 Stars", text: "Very clean facilities."}] 
             },
             { 
                 id: 4, name: "Ernakulam South Railway Station Water Point", type: "water", price: "Free", accessible: false, lat: 9.9680, lng: 76.2870, status: "Clean & Usable", updated: "40 mins ago", 
@@ -380,7 +333,7 @@
             },
             { 
                 id: 5, name: "High Court Junction Public Restroom", type: "toilet", price: "Free", accessible: true, lat: 9.9920, lng: 76.2780, status: "Broken / Not Working", updated: "2 hours ago", 
-                reviews: [{rating: "1 Star", text: "Water supply pipe broken.", img: ""}] 
+                reviews: [{rating: "1 Star", text: "Water supply pipe broken."}] 
             }
         ];
 
@@ -405,7 +358,6 @@
                     map.setView([lat, lng], 16);
                     if (userMarker) map.removeLayer(userMarker);
                     userMarker = L.marker([lat, lng]).addTo(map).bindPopup("Current GPS Location").openPopup();
-                    document.getElementById('reportLocationInput').value = "Current GPS Location (" + lat.toFixed(4) + ", " + lng.toFixed(4) + ")";
                 }, (error) => {
                     alert("Geolocation error: " + error.message);
                 }, { enableHighAccuracy: true, timeout: 10000 });
@@ -414,16 +366,7 @@
             }
         }
 
-        function handleImagePreview(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.getElementById('imageFileName').innerText = "Attached: " + file.name;
-                const reader = new FileReader();
-                reader.onload = function(e) { uploadedImageBase64 = e.target.result; };
-                reader.readAsDataURL(file);
-            }
-        }
-
+        // Render markers with rating box and review submission form INSIDE the popup
         function renderMarkers(dataToRender) {
             if (!map) return;
             markers.forEach(m => map.removeLayer(m));
@@ -431,68 +374,68 @@
 
             dataToRender.forEach(f => {
                 const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${f.lat},${f.lng}`;
+                
                 let reviewsHtml = f.reviews.length > 0 ? f.reviews.map(r => `
-                    <div style="border-top:1px solid #eee; margin-top:4px; padding-top:4px; font-size:10px;">
-                        <b>${r.rating}</b> - ${r.text}<br>
-                        ${r.img ? `<img src="${r.img}" style="width:60px; height:40px; object-fit:cover; border-radius:3px; margin-top:2px;">` : ''}
+                    <div style="border-top:1px solid #eee; margin-top:3px; padding-top:3px; font-size:10px;">
+                        <b>${r.rating}</b> - ${r.text}
                     </div>
-                `).join('') : '<i style="font-size:10px; color:#888;">No reviews</i>';
+                `).join('') : '<i style="font-size:10px; color:#888;">No reviews yet</i>';
 
-                const marker = L.marker([f.lat, f.lng]).addTo(map)
-                    .bindPopup(`
-                        <div style="font-family:sans-serif; min-width:170px;">
-                            <b style="font-size:12px; color:#0f766e;">${f.name}</b><br>
-                            <span style="font-size:10px;">Type: <b>${f.type.toUpperCase()}</b> | ${f.price}</span><br>
-                            <span style="font-size:10px;">Status: <b style="color:${f.status.includes('Clean') ? 'green' : 'red'};">${f.status}</b></span><br><br>
-                            <div style="max-height:80px; overflow-y:auto;">${reviewsHtml}</div>
-                            <a href="${mapsUrl}" target="_blank" style="background:#0d9488; color:white; padding:3px 8px; border-radius:99px; text-decoration:none; font-size:10px; font-weight:bold; display:block; text-align:center; margin-top:5px;">Get Directions</a>
-                        </div>
-                    `);
+                const popupContent = document.createElement('div');
+                popupContent.style.cssText = "font-family:sans-serif; min-width:200px; font-size:11px;";
+                popupContent.innerHTML = `
+                    <b style="font-size:12px; color:#0f766e; display:block; margin-bottom:2px;">${f.name}</b>
+                    <span>Type: <b>${f.type.toUpperCase()}</b> | ${f.price}</span><br>
+                    <span>Status: <b style="color:${f.status.includes('Clean') ? 'green' : 'red'};">${f.status}</b></span><br><br>
+                    
+                    <b>Community Reviews:</b>
+                    <div style="max-height:60px; overflow-y:auto; margin-bottom:6px;" id="reviews-list-${f.id}">${reviewsHtml}</div>
+                    
+                    <!-- Rating & Review Box Inside Popup -->
+                    <div style="background:#f1f5f9; padding:6px; border-radius:6px; margin-bottom:6px;">
+                        <div style="font-weight:bold; margin-bottom:2px;">Add Review & Rating</div>
+                        <select id="pop-rating-${f.id}" style="width:100%; margin-bottom:3px; font-size:10px; padding:2px;">
+                            <option value="5 Stars">5 Stars</option>
+                            <option value="4 Stars">4 Stars</option>
+                            <option value="3 Stars">3 Stars</option>
+                            <option value="2 Stars">2 Stars</option>
+                            <option value="1 Star">1 Star</option>
+                        </select>
+                        <input type="text" id="pop-text-${f.id}" placeholder="Write condition update..." style="width:100%; font-size:10px; padding:3px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:3px;">
+                        <button type="button" onclick="submitPopupReview(${f.id})" style="background:#0d9488; color:white; border:none; padding:3px 6px; border-radius:4px; font-size:10px; font-weight:bold; width:100%; cursor:pointer;">Submit Rating & Report</button>
+                    </div>
+
+                    <a href="${mapsUrl}" target="_blank" style="background:#2563eb; color:white; padding:3px 6px; border-radius:99px; text-decoration:none; font-size:10px; font-weight:bold; display:block; text-align:center;">Get Directions</a>
+                `;
+
+                const marker = L.marker([f.lat, f.lng]).addTo(map).bindPopup(popupContent);
                 markers.push(marker);
             });
+        }
+
+        // Function to handle review submission from inside the Leaflet popup
+        function submitPopupReview(facilityId) {
+            const rating = document.getElementById(`pop-rating-${facilityId}`).value;
+            const text = document.getElementById(`pop-text-${facilityId}`).value;
+            const facility = facilities.find(f => f.id === facilityId);
+
+            if (facility) {
+                facility.reviews.unshift({ rating: rating, text: text || "Condition updated" });
+                
+                // Generate municipal ticket and route issue
+                const ticketId = Math.floor(100000 + Math.random() * 900000);
+                userTickets.unshift({ id: ticketId, facility: facility.name, status: "Condition Reported", route: "Routed to Ward 4 Officer" });
+                renderTickets();
+
+                alert(`Review submitted & Ticket #${ticketId} routed to local municipal body!`);
+                renderMarkers(facilities);
+            }
         }
 
         function handleSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filtered = facilities.filter(f => f.name.toLowerCase().includes(query) || f.type.toLowerCase().includes(query));
             renderMarkers(filtered);
-        }
-
-        function handleReport(e) {
-            e.preventDefault();
-            const locationName = document.getElementById('reportLocationInput').value;
-            const status = document.getElementById('reportStatus').value;
-            const reviewText = document.getElementById('reviewText').value;
-            const starRating = document.getElementById('starRating').value;
-            const ticketId = Math.floor(100000 + Math.random() * 900000);
-
-            let targetFacility = facilities.find(f => f.name.toLowerCase() === locationName.toLowerCase());
-            if (!targetFacility) {
-                targetFacility = {
-                    id: facilities.length + 1, name: locationName, type: "toilet", price: "Free", accessible: true,
-                    lat: 9.9816 + (Math.random() - 0.5) * 0.03, lng: 76.2998 + (Math.random() - 0.5) * 0.03,
-                    status: status, updated: "Just now", reviews: []
-                };
-                facilities.push(targetFacility);
-            }
-
-            targetFacility.status = status;
-            targetFacility.updated = "Just now";
-            if (reviewText || uploadedImageBase64) {
-                targetFacility.reviews.unshift({ rating: starRating, text: reviewText || "Reported update", img: uploadedImageBase64 });
-            }
-
-            renderMarkers(facilities);
-
-            userTickets.unshift({ id: ticketId, facility: locationName, status: status, route: "Routed to Ward 4 Municipal Officer" });
-            renderTickets();
-
-            document.getElementById('reportSuccess').innerText = `Ticket #${ticketId} routed to local body!`;
-            setTimeout(() => document.getElementById('reportSuccess').innerText = '', 4000);
-            
-            uploadedImageBase64 = '';
-            document.getElementById('imageFileName').innerText = '';
-            e.target.reset();
         }
 
         function renderTickets() {
