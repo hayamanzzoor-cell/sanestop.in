@@ -97,16 +97,14 @@
             <div id="map" class="map-canvas"></div>
         </div>
 
-        <!-- ==================== DESKTOP VIEW (Floating GIS Card UI) ==================== -->
+        <!-- ==================== DESKTOP VIEW ==================== -->
         <div class="hidden md:block">
-            <!-- Top Nav -->
             <header class="absolute top-4 right-8 z-30 flex items-center space-x-3 pointer-events-auto">
                 <button type="button" onclick="goBackToWelcome()" class="px-4 py-2 rounded-full bg-white dark:bg-slate-900 text-xs font-extrabold shadow-airbnb border border-slate-200 dark:border-slate-800">Back</button>
                 <button type="button" onclick="toggleDarkMode()" class="px-4 py-2 rounded-full bg-white dark:bg-slate-900 text-xs font-extrabold shadow-airbnb border border-slate-200 dark:border-slate-800">Theme</button>
                 <button type="button" onclick="toggleProfileModal(true)" class="px-5 py-2 rounded-full bg-slate-900 dark:bg-teal-600 text-white text-xs font-extrabold shadow-airbnb" id="navProfileTextDesktop">Profile</button>
             </header>
 
-            <!-- Floating Left Panel -->
             <div class="absolute top-4 left-8 z-20 w-80 max-h-[calc(100vh-2rem)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-airbnb border border-slate-200/80 dark:border-slate-800 p-5 overflow-y-auto space-y-4 pointer-events-auto">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                     <span class="text-xs font-black uppercase tracking-wider text-slate-500">Sane-Stop GIS Portal</span>
@@ -136,11 +134,9 @@
             </div>
         </div>
 
-        <!-- ==================== MOBILE VIEW (Airbnb-Style Flawless UI) ==================== -->
+        <!-- ==================== MOBILE VIEW ==================== -->
         <div class="block md:hidden">
-            <!-- Floating Top Search & Airbnb Category Chips Bar -->
             <div class="absolute top-4 inset-x-4 z-30 space-y-2 pointer-events-none">
-                <!-- Search & Actions Top Pill -->
                 <div class="bg-white dark:bg-slate-900 backdrop-blur-xl px-4 py-3 rounded-full shadow-airbnb border border-slate-200/80 dark:border-slate-800 flex items-center justify-between pointer-events-auto">
                     <div class="flex items-center space-x-2 flex-1 mr-2">
                         <button type="button" onclick="goBackToWelcome()" class="text-xs font-extrabold text-slate-700 dark:text-slate-300">←</button>
@@ -152,7 +148,6 @@
                     </div>
                 </div>
 
-                <!-- Airbnb Horizontal Scrollable Category Chips -->
                 <div class="flex items-center space-x-2 overflow-x-auto pb-1 pointer-events-auto no-scrollbar px-1">
                     <button type="button" onclick="filterMarkers('all', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-slate-900 dark:bg-teal-600 text-white shadow-airbnb whitespace-nowrap transition-all">All</button>
                     <button type="button" onclick="filterMarkers('toilet', this)" class="mobile-filter px-4 py-2 rounded-full text-xs font-extrabold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 shadow-airbnb border border-slate-200/80 dark:border-slate-800 whitespace-nowrap transition-all">Toilets</button>
@@ -162,7 +157,6 @@
                 </div>
             </div>
 
-            <!-- Floating Bottom Sheet for Mobile Tickets -->
             <div class="absolute bottom-4 inset-x-4 z-30 pointer-events-none">
                 <div class="bg-white dark:bg-slate-900 backdrop-blur-xl p-3.5 rounded-3xl shadow-sheet border border-slate-200/80 dark:border-slate-800 max-h-32 overflow-y-auto pointer-events-auto space-y-1.5">
                     <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -187,8 +181,8 @@
             </div>
             <div class="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                 <p><strong>Name:</strong> <span id="profileNameDisplay">Citizen User</span></p>
-                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span>[cite: 1]</p>
-                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly[cite: 1].</p>
+                <p><strong>Assigned Ward:</strong> <span id="profileWardDisplay">Ward 4 - Central Zone</span></p>
+                <p class="text-slate-500">Privacy rule: Reporter identities are securely encrypted and never disclosed publicly.</p>
             </div>
             <button type="button" onclick="handleLogout()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-sm transition-all">Logout</button>
         </div>
@@ -200,6 +194,7 @@
         let map, markers = [], satelliteLayer, userMarker;
         let userTickets = [];
         let currentUser = null;
+        let isSignupMode = false;
 
         window.onload = function() {
             const savedUser = localStorage.getItem('saneStopUser');
@@ -226,11 +221,13 @@
             const submitBtn = document.getElementById('authSubmitBtn');
 
             if (tab === 'signup') {
+                isSignupMode = true;
                 signupBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
                 loginBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-500 transition-all";
                 nameField.classList.remove('hidden');
                 submitBtn.innerText = "Register Account";
             } else {
+                isSignupMode = false;
                 loginBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all";
                 signupBtn.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold text-slate-500 transition-all";
                 nameField.classList.add('hidden');
@@ -244,21 +241,23 @@
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
             const nameInput = document.getElementById('signupName').value;
-            const isSignup = !document.getElementById('nameFieldContainer').classList.contains('hidden');
 
             localStorage.setItem('saneStopEmail', email);
             localStorage.setItem('saneStopPass', pass);
             tempEmail = email;
 
-            if (isSignup) {
+            if (isSignupMode) {
                 document.getElementById('authView').classList.add('hidden');
                 document.getElementById('profileCreationView').classList.remove('hidden');
                 document.getElementById('profileDisplayName').value = nameInput || "Citizen User";
             } else {
-                currentUser = { name: "Registered User", email: email, ward: "Ward 4 - Central Zone" };
+                // FIXED: Direct Login bypasses profile creation screen
+                currentUser = { name: nameInput || email.split('@')[0], email: email, ward: "Ward 4 - Central Zone" };
                 localStorage.setItem('saneStopUser', JSON.stringify(currentUser));
                 document.getElementById('authView').classList.add('hidden');
                 document.getElementById('appView').classList.remove('hidden');
+                document.getElementById('profileNameDisplay').innerText = currentUser.name;
+                document.getElementById('profileWardDisplay').innerText = currentUser.ward;
                 setTimeout(() => initMap(), 150);
             }
         }
@@ -422,7 +421,7 @@
                 userTickets.unshift({ id: ticketId, facility: facility.name, status: "Condition Reported", route: "Routed to Ward 4 Officer" });
                 renderTickets();
 
-                alert(`Review submitted & Ticket #${ticketId} routed to local municipal body[cite: 1]!`);
+                alert(`Review submitted & Ticket #${ticketId} routed to local municipal body!`);
                 renderMarkers(facilities);
             }
         }
@@ -439,7 +438,7 @@
                 userTickets.map(t => `
                     <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-0.5 text-xs">
                         <div class="flex justify-between font-bold text-[10px]">
-                            <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}[cite: 1]</span>
+                            <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}</span>
                             <span class="text-emerald-600">${t.status}</span>
                         </div>
                         <p class="text-slate-600 dark:text-slate-300 truncate text-[10px]">${t.facility}</p>
