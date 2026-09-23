@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sane-Stop - Public Sanitation & Water Finder</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    borderRadius: {
+                        '3xl': '1.75rem',
+                        '4xl': '2.5rem',
+                    },
+                    boxShadow: {
+                        'glow': '0 0 35px -5px rgba(20, 184, 166, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: calc(100vh - 5rem); width: 100%; }
+        @media (max-width: 768px) { #map { height: 50vh; } }
+        .dark .leaflet-tile-pane { filter: brightness(0.6) contrast(1.3) saturate(1.2); }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans transition-colors duration-500 overflow-x-hidden">
+
+    <!-- LOGIN / SIGNUP VIEW -->
+    <div id="authView" class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-950 via-teal-900 to-slate-950 relative">
+        <div class="bg-white/10 dark:bg-slate-900/80 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/20 space-y-6">
+            <div class="text-center space-y-2">
+                <h1 class="text-3xl font-black tracking-tight text-white">Sane-Stop</h1>
+                <p class="text-xs text-teal-200 uppercase tracking-widest font-semibold">Secure Municipal Gateway</p>
+            </div>
+
+            <div class="flex bg-black/20 p-1 rounded-2xl">
+                <button onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 py-2 rounded-xl text-xs font-bold bg-white/20 text-white transition-all">Login</button>
+                <button onclick="switchAuthTab('signup')" id="signupTabBtn" class="flex-1 py-2 rounded-xl text-xs font-bold text-slate-400 transition-all">Sign Up</button>
+            </div>
+
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <div id="nameFieldContainer" class="hidden space-y-1">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your name" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Email Address</label>
+                    <input type="email" id="authEmail" required placeholder="user@sanestop.com" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">Password</label>
+                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white outline-none focus:ring-2 focus:ring-teal-400">
+                </div>
+                <button type="submit" id="authSubmitBtn" class="w-full py-3.5 bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-lg transition-all">
+                    Login to Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PROFILE CREATION VIEW (First time only) -->
+    <div id="profileCreationView" class="hidden min-h-screen flex flex-col items-center justify-center p-6 bg-slate-950">
+        <div class="bg-slate-900 p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-800 space-y-6">
+            <h2 class="text-xl font-black text-white">Create Your Citizen Profile</h2>
+            <form onsubmit="handleProfileCreation(event)" class="space-y-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-slate-400">Public Display Name</label>
+                    <input type="text" id="profileDisplayName" required class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-slate-400">Ward / Region</label>
+                    <input type="text" id="profileWard" required value="Ward 4 - Central Zone" class="w-full px-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-xs text-white outline-none">
+                </div>
+                <button type="submit" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs uppercase rounded-2xl transition-all">
+                    Complete Setup
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP DASHBOARD -->
+    <div id="appView" class="hidden h-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+        <!-- Top Navigation Bar -->
+        <header class="h-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl shadow-sm px-4 md:px-8 flex items-center justify-between z-50 border-b border-slate-200/60 dark:border-slate-800/60 flex-shrink-0">
+            <div class="flex items-center space-x-3.5">
+                <button onclick="goBackToWelcome()" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">← Back</button>
+                <div>
+                    <span class="text-xl font-black tracking-tight bg-gradient-to-r from-blue-600 to-teal-500 dark:from-blue-400 dark:to-teal-400 bg-clip-text text-transparent">Sane-Stop</span>
+                    <span class="block text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">Public Welfare & Access Finder</span>
+                </div>
+            </div>
+
+            <!-- Smart Search Bar -->
+            <div class="hidden sm:flex items-center bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md px-4 py-2.5 rounded-full w-56 md:w-80 border border-slate-200 dark:border-slate-700/60 shadow-inner">
+                <span class="text-slate-400 mr-2.5 text-xs">Search</span>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search facility name..." class="bg-transparent border-none outline-none w-full text-xs md:text-sm font-medium">
+            </div>
+
+            <!-- Action Suite -->
+            <div class="flex items-center space-x-2 md:space-x-3">
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-xs px-3 py-2 rounded-full outline-none font-bold border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer">
+                    <option value="en">English</option>
+                    <option value="ml">മലയാളം</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="ta">தமிழ்</option>
+                </select>
+
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md hover:scale-105 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">Theme</button>
+                
+                <button onclick="toggleProfileModal(true)" class="flex items-center space-x-2 bg-blue-50 dark:bg-blue-950/50 px-3.5 py-1.5 rounded-full border border-blue-200 dark:border-blue-800 hover:scale-105 transition-all shadow-sm">
+                    <span class="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-[10px] font-black">SS</span>
+                    <span class="text-xs font-bold hidden md:inline" id="navProfileText">Profile</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Body: Sidebar + Map -->
+        <div class="flex flex-1 flex-col md:flex-row relative overflow-hidden">
+            <!-- Sidebar Controls -->
+            <aside class="w-full md:w-[390px] lg:w-[430px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl p-5 md:p-6 shadow-2xl z-10 overflow-y-auto space-y-4 md:space-y-5 flex-shrink-0 border-r border-slate-200/60 dark:border-slate-800/60 h-[48vh] md:h-auto">
+                
+                <!-- Action Grid -->
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button onclick="panToUserLocation()" class="py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white text-xs font-black rounded-2xl shadow-lg transition-all">
+                        Near Me GPS
+                    </button>
+                    <button onclick="triggerEmergencySOS()" class="py-3 bg-gradient-to-r from-rose-600 to-red-600 text-white text-xs font-black rounded-2xl shadow-lg transition-all">
+                        Emergency SOS
+                    </button>
+                </div>
+
+                <!-- Upgraded Filter Chips -->
+                <div class="bg-slate-50/80 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-3" id="filtersTitle">Find Fast</h2>
+                    <div class="grid grid-cols-2 gap-2" id="filterButtonsContainer">
+                        <button onclick="setActiveFilter('all', this)" class="filter-btn py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-teal-600 text-white shadow-md transition-all flex items-center justify-center space-x-1.5" id="filterAll">
+                            <span>All Services</span>
+                        </button>
+                        <button onclick="setActiveFilter('toilet', this)" class="filter-btn py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterToilet">
+                            <span>Toilets</span>
+                        </button>
+                        <button onclick="setActiveFilter('water', this)" class="filter-btn py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterWater">
+                            <span>Water Points</span>
+                        </button>
+                        <button onclick="setActiveFilter('free', this)" class="filter-btn py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterFree">
+                            <span>Free Only</span>
+                        </button>
+                        <button onclick="setActiveFilter('accessible', this)" class="filter-btn col-span-2 py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterAccessible">
+                            <span>Wheelchair Accessible</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Form -->
+                <div class="bg-gradient-to-b from-slate-50/90 to-teal-50/30 dark:from-slate-800/60 dark:to-teal-950/20 p-4.5 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+                    <h3 class="font-black text-xs text-slate-900 dark:text-slate-100" id="reportTitle">Found a Problem? Report It</h3>
+                    <form onsubmit="handleReport(event)" class="space-y-2.5">
+                        <input type="text" id="reportLocationInput" required placeholder="Facility name or GPS coordinate..." class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium outline-none">
+                        
+                        <select id="reportStatus" class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold outline-none cursor-pointer">
+                            <option value="Broken / Not Working">Broken / Not Working</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Dirty / Uncleaned">Dirty / Uncleaned</option>
+                            <option value="Foul Smell">Foul Smell</option>
+                            <option value="Clean & Usable">Clean & Usable</option>
+                        </select>
+
+                        <textarea id="reviewText" placeholder="Write a helpful review..." class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium outline-none h-16 resize-none"></textarea>
+                        
+                        <div class="flex items-center justify-between text-xs px-1 bg-white/70 dark:bg-slate-900/70 p-2.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
+                            <span class="font-bold text-slate-500">Rating: 
+                                <select id="starRating" class="bg-transparent font-black text-amber-500 outline-none cursor-pointer">
+                                    <option value="5 Stars">5 Stars</option>
+                                    <option value="4 Stars">4 Stars</option>
+                                    <option value="3 Stars">3 Stars</option>
+                                    <option value="2 Stars">2 Stars</option>
+                                    <option value="1 Star">1 Star</option>
+                                </select>
+                            </span>
+                            <label class="cursor-pointer bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 px-3 py-1.5 rounded-xl font-bold hover:bg-teal-100 transition-all text-[11px]">
+                                Add Photo <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handleImagePreview(event)">
+                            </label>
+                        </div>
+                        <div id="imageFileName" class="text-[10px] text-teal-500 font-bold px-1"></div>
+
+                        <button type="submit" id="submitReportBtn" class="w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 text-white text-xs font-black uppercase tracking-wider rounded-2xl shadow-lg transition-all">
+                            Send Report & Route to Ward
+                        </button>
+                    </form>
+                    <div id="reportSuccess" class="text-xs text-teal-600 dark:text-teal-400 font-bold text-center"></div>
+                </div>
+
+                <!-- Municipal Ticket Tracker Section -->
+                <div class="bg-slate-50/80 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-2.5" id="ticketsTitle">My Sent Reports & Municipal Tickets</h2>
+                    <div id="ticketTrackerList" class="space-y-2 text-xs">
+                        <p class="text-slate-400 italic text-center py-2 text-xs" id="noTicketsText">No reports sent yet.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Map Area -->
+            <main class="flex-1 relative h-[52vh] md:h-auto">
+                <div id="map" class="w-full h-full"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- USER PROFILE MODAL -->
+    <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-4xl shadow-2xl w-full max-w-lg p-6 md:p-8 border border-slate-200 dark:border-slate-800 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h2 class="text-lg md:text-xl font-black tracking-tight" id="profileModalTitle">My Profile & Credentials</h2>
+                <button onclick="toggleProfileModal(false)" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold">✕</button>
+            </div>
+
+            <div class="flex items-center space-x-4 p-4 rounded-3xl bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-950/40 dark:to-teal-950/40 border border-blue-100 dark:border-teal-900/60 shadow-sm">
+                <div class="w-14 h-14 bg-gradient-to-tr from-teal-600 to-emerald-600 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">SS</div>
+                <div>
+                    <h3 class="font-extrabold text-base text-slate-900 dark:text-white" id="profileNameDisplay">Sane-Stop Citizen User</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium" id="profileWardDisplay">Ward 4 - Central Zone</p>
+                    <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">Verified Municipal Contributor</span>
+                </div>
+            </div>
+
+            <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
+                <p><strong>Privacy Note:</strong> Your personal identity and location histories are securely encrypted and never disclosed publicly in accordance with strict municipal privacy guidelines.</p>
+                <p><strong>Support Helpline:</strong> Contact Urban Sanitation & Water Cell at 1800-SANESTOP.</p>
+            </div>
+            <button onclick="handleLogout()" class="w-full py-2.5 bg-rose-600 text-white font-bold text-xs rounded-xl">Logout / Switch User</button>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map, markers = [], satelliteLayer, userMarker;
+        let userTickets = [];
+        let currentLang = 'en';
+        let currentUser = null;
+        let uploadedImageBase64 = '';
+
+        const translations = {
+            en: {
+                navProfile: "Profile", nearMe: "Near Me", sos: "SOS Help", filters: "Find Fast",
+                all: "All Services", toilets: "Toilets", water: "Water Points", free: "Free Only", accessible: "Wheelchair Accessible",
+                reportTitle: "Found a Problem? Report It", submitReport: "Send Report & Route to Ward",
+                ticketsTitle: "My Sent Reports & Municipal Tickets", noTickets: "No reports sent yet.",
+                profileTitle: "My Profile & Credentials"
+            },
+            ml: {
+                navProfile: "പ്രൊഫൈൽ", nearMe: "എന്റെ അരികിൽ", sos: "അടിയന്തിര സഹായം", filters: "പെട്ടെന്ന് കണ്ടെത്തുക",
+                all: "എല്ലാ സേവനങ്ങളും", toilets: "ടോയ്‌ലറ്റ്", water: "വെള്ളം", free: "സൗജന്യം മാത്രം", accessible: "ഭിന്നശേഷി സൗഹൃദം",
+                reportTitle: "പ്രശ്നം റിപ്പോർട്ട് ചെയ്യുക", submitReport: "അയക്കുക",
+                ticketsTitle: "എന്റെ റിപ്പോർട്ടുകൾ", noTickets: "റിപ്പോർട്ടുകൾ ഒന്നുമില്ല.",
+                profileTitle: "പ്രൊഫൈൽ"
+            },
+            hi: {
+                navProfile: "प्रोफ़ाइल", nearMe: "आसपास", sos: "आपातकालीन मदद", filters: "त्वरित फ़िल्टर",
+                all: "सभी सेवाएं", toilets: "शौचालय", water: "पानी", free: "केवल मुफ़्त", accessible: "सुलभ",
+                reportTitle: "समस्या रिपोर्ट करें", submitReport: "रिपोर्ट भेजें",
+                ticketsTitle: "मेरी भेजी गई रिपोर्ट्स", noTickets: "कोई रिपोर्ट नहीं.",
+                profileTitle: "यूजर प्रोफाइल"
+            },
+            ta: {
+                navProfile: "சுயவிவரம்", nearMe: "அருகில்", sos: "அவசர உதவி", filters: "விரைவு தேடல்",
+                all: "அனைத்து சேவைகள்", toilets: "கழிப்பறை", water: "நீர்", free: "இலவசம் மட்டும்", accessible: "அணுகக்கூடியது",
+                reportTitle: "சிக்கலைப் புகாரளி", submitReport: "அனுப்பு",
+                ticketsTitle: "எனது புகார்கள்", noTickets: "புகார்கள் இல்லை.",
+                profileTitle: "சுயவிவரம்"
+            }
+        };
+
+        window.onload = function() {
+            // Check local storage for persistent session
+            const savedUser = localStorage.getItem('saneStopUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('authView').classList.add('hidden');
+                document.getElementById('appView').classList.remove('hidden');
+                document.getElementById('profileNameDisplay').innerText = currentUser.name;
+                document.getElementById('profileWardDisplay').innerText = currentUser.ward;
+                setTimeout(() => initMap(), 150);
+            } else {
+                // Pre-fill remembered email/password if any
+                const rememberedEmail = localStorage.getItem('saneStopEmail');
+                const rememberedPass = localStorage.getItem('saneStopPass');
+                if (rememberedEmail) document.getElementById('authEmail').value = rememberedEmail;
+                if (rememberedPass) document.getElementById('authPassword').value = rememberedPass;
+            }
+        };
+
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById('loginTabBtn');
+            const signupBtn = document.getElementById('signupTabBtn');
+            const nameField = document.getElementById('nameFieldContainer');
+            const submitBtn = document.getElementById('authSubmitBtn');
+
+            if (tab === 'signup') {
+                signupBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold bg-white/20 text-white transition-all";
+                loginBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold text-slate-400 transition-all";
+                nameField.classList.remove('hidden');
+                submitBtn.innerText = "Register Account";
+            } else {
+                loginBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold bg-white/20 text-white transition-all";
+                signupBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold text-slate-400 transition-all";
+                nameField.classList.add('hidden');
+                submitBtn.innerText = "Login to Portal";
+            }
+        }
+
+        let tempEmail = '';
+        let tempPass = '';
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+            const nameInput = document.getElementById('signupName').value;
+            const isSignup = !document.getElementById('nameFieldContainer').classList.contains('hidden');
+
+            localStorage.setItem('saneStopEmail', email);
+            localStorage.setItem('saneStopPass', pass);
+
+            tempEmail = email;
+            tempPass = pass;
+
+            if (isSignup) {
+                document.getElementById('authView').classList.add('hidden');
+                document.getElementById('profileCreationView').classList.remove('hidden');
+                document.getElementById('profileDisplayName').value = nameInput || "Citizen User";
+            } else {
+                // Direct login
+                currentUser = { name: "Registered User", email: email, ward: "Ward 4 - Central Zone" };
+                localStorage.setItem('saneStopUser', JSON.stringify(currentUser));
+                document.getElementById('authView').classList.add('hidden');
+                document.getElementById('appView').classList.remove('hidden');
+                setTimeout(() => initMap(), 150);
+            }
+        }
+
+        function handleProfileCreation(e) {
+            e.preventDefault();
+            const name = document.getElementById('profileDisplayName').value;
+            const ward = document.getElementById('profileWard').value;
+
+            currentUser = { name: name, email: tempEmail, ward: ward };
+            localStorage.setItem('saneStopUser', JSON.stringify(currentUser));
+
+            document.getElementById('profileCreationView').classList.add('hidden');
+            document.getElementById('appView').classList.remove('hidden');
+            document.getElementById('profileNameDisplay').innerText = name;
+            document.getElementById('profileWardDisplay').innerText = ward;
+            setTimeout(() => initMap(), 150);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('saneStopUser');
+            location.reload();
+        }
+
+        function goBackToWelcome() {
+            document.getElementById('appView').classList.add('hidden');
+            document.getElementById('authView').classList.remove('hidden');
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('navProfileText').innerText = t.navProfile;
+            document.getElementById('filtersTitle').innerText = t.filters;
+            document.getElementById('reportTitle').innerText = t.reportTitle;
+            document.getElementById('submitReportBtn').innerText = t.submitReport;
+            document.getElementById('ticketsTitle').innerText = t.ticketsTitle;
+            document.getElementById('noTicketsText').innerText = t.noTickets;
+            document.getElementById('profileModalTitle').innerText = t.profileTitle;
+        }
+
+        function setActiveFilter(type, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm";
+            });
+            btnElement.className = "filter-btn py-2.5 px-4 rounded-2xl text-xs font-extrabold bg-teal-600 text-white shadow-md transition-all flex items-center justify-center space-x-1.5";
+            filterMarkers(type);
+        }
+
+        const facilities = [
+            { 
+                id: 1, name: "Ernakulam Central KSRTC Bus Terminal Restroom", type: "toilet", price: "Free", accessible: true, confidence: "98% Reliable", lat: 9.9816, lng: 76.2998, status: "Clean & Usable", updated: "10 mins ago", 
+                reviews: [{rating: "5 Stars", text: "Spacious and well maintained near platform 1.", img: ""}] 
+            },
+            { 
+                id: 2, name: "MG Road Metro Station Drinking Water Kiosk", type: "water", price: "Free", accessible: true, confidence: "95% Reliable", lat: 9.9750, lng: 76.2853, status: "Clean & Usable", updated: "25 mins ago", 
+                reviews: [{rating: "4 Stars", text: "Cold RO water available right near security check.", img: ""}] 
+            },
+            { 
+                id: 3, name: "Marine Drive Walkway Public Restroom", type: "toilet", price: "Paid (5 INR)", accessible: true, confidence: "92% Reliable", lat: 9.9890, lng: 76.2790, status: "Clean & Usable", updated: "5 mins ago", 
+                reviews: [{rating: "5 Stars", text: "Great view and very clean facilities.", img: ""}] 
+            },
+            { 
+                id: 4, name: "Ernakulam South Railway Station Water Point", type: "water", price: "Free", accessible: false, confidence: "89% Reliable", lat: 9.9680, lng: 76.2870, status: "Clean & Usable", updated: "40 mins ago", 
+                reviews: [] 
+            },
+            { 
+                id: 5, name: "High Court Junction Public Restroom", type: "toilet", price: "Free", accessible: true, confidence: "70% Reliable", lat: 9.9920, lng: 76.2780, status: "Broken / Not Working", updated: "2 hours ago", 
+                reviews: [{rating: "1 Star", text: "Water supply pipe broken.", img: ""}] 
+            },
+            { 
+                id: 6, name: "Fort Kochi Beach Public Water Fountain", type: "water", price: "Free", accessible: true, confidence: "96% Reliable", lat: 9.9650, lng: 76.2420, status: "Clean & Usable", updated: "1 hour ago", 
+                reviews: [{rating: "5 Stars", text: "Handy near the tourist walking path.", img: ""}] 
+            },
+            { 
+                id: 7, name: "Vyttila Hub Public Sanitation Complex", type: "toilet", price: "Paid (5 INR)", accessible: true, confidence: "94% Reliable", lat: 9.9640, lng: 76.3190, status: "Clean & Usable", updated: "15 mins ago", 
+                reviews: [{rating: "4 Stars", text: "Busy transit point, kept reasonably clean.", img: ""}] 
+            }
+        ];
+
+        function initMap() {
+            if (map) return;
+            map = L.map('map').setView([9.9816, 76.2998], 14);
+            
+            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Tiles &copy; Esri'
+            }).addTo(map);
+
+            renderMarkers(facilities);
+            setTimeout(() => { map.invalidateSize(); }, 300);
+        }
+
+        function panToUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    map.setView([lat, lng], 16);
+                    if (userMarker) map.removeLayer(userMarker);
+                    userMarker = L.marker([lat, lng]).addTo(map).bindPopup("Current GPS Location").openPopup();
+                    document.getElementById('reportLocationInput').value = "Current GPS Location (" + lat.toFixed(4) + ", " + lng.toFixed(4) + ")";
+                }, () => {
+                    alert("Unable to get location.");
+                });
+            } else {
+                alert("GPS not supported.");
+            }
+        }
+
+        function triggerEmergencySOS() {
+            alert("EMERGENCY SOS: Connecting to nearest municipal assistance helpline and broadcasting accessible transit route.");
+        }
+
+        function handleImagePreview(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('imageFileName').innerText = "Attached: " + file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function renderMarkers(dataToRender) {
+            if (!map) return;
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+
+            dataToRender.forEach(f => {
+                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${f.lat},${f.lng}`;
+                
+                let reviewsHtml = f.reviews.length > 0 ? f.reviews.map(r => `
+                    <div style="border-top:1px solid #eee; margin-top:5px; padding-top:5px; font-size:11px;">
+                        <b>${r.rating}</b> - ${r.text}<br>
+                        ${r.img ? `<img src="${r.img}" style="width:75px; height:50px; object-fit:cover; border-radius:4px; margin-top:3px;">` : ''}
+                    </div>
+                `).join('') : '<i style="font-size:11px; color:#888;">No reviews yet</i>';
+
+                const marker = L.marker([f.lat, f.lng]).addTo(map)
+                    .bindPopup(`
+                        <div style="font-family:sans-serif; min-width:190px; padding:2px;">
+                            <b style="font-size:13px; color:#0f766e; display:block; margin-bottom:3px;">${f.name}</b>
+                            <span style="font-size:11px; color:#475569;">Type: <b>${f.type.toUpperCase()}</b> | Price: ${f.price}</span><br>
+                            <span style="font-size:11px; color:#475569;">Wheelchair Access: <b>${f.accessible ? 'Yes' : 'No'}</b></span><br>
+                            <span style="font-size:11px; color:#475569;">Status: <span style="color:${f.status.includes('Clean') ? '#059669' : '#dc2626'}; font-weight:bold;">${f.status}</span></span><br>
+                            <span style="font-size:10px; color:#94a3b8;">Updated: ${f.updated}</span><br><br>
+                            <b style="font-size:11px; color:#334155;">Reviews & Photos:</b>
+                            <div style="max-height:100px; overflow-y:auto; margin-bottom:6px;">${reviewsHtml}</div>
+                            <a href="${mapsUrl}" target="_blank" style="background:#0d9488; color:white; padding:5px 10px; border-radius:99px; text-decoration:none; font-size:11px; font-weight:bold; display:block; text-align:center;">Get Directions</a>
+                        </div>
+                    `);
+                markers.push(marker);
+            });
+        }
+
+        function filterMarkers(type) {
+            if (type === 'all') {
+                renderMarkers(facilities);
+            } else if (type === 'free') {
+                renderMarkers(facilities.filter(f => f.price.toLowerCase().includes('free')));
+            } else if (type === 'accessible') {
+                renderMarkers(facilities.filter(f => f.accessible === true));
+            } else {
+                renderMarkers(facilities.filter(f => f.type === type));
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = facilities.filter(f => f.name.toLowerCase().includes(query) || f.type.toLowerCase().includes(query));
+            renderMarkers(filtered);
+        }
+
+        function handleReport(e) {
+            e.preventDefault();
+            const locationName = document.getElementById('reportLocationInput').value;
+            const status = document.getElementById('reportStatus').value;
+            const reviewText = document.getElementById('reviewText').value;
+            const starRating = document.getElementById('starRating').value;
+            const ticketId = Math.floor(100000 + Math.random() * 900000);
+
+            let targetFacility = facilities.find(f => f.name.toLowerCase() === locationName.toLowerCase());
+            if (!targetFacility) {
+                targetFacility = {
+                    id: facilities.length + 1,
+                    name: locationName,
+                    type: "toilet",
+                    price: "Free",
+                    accessible: true,
+                    confidence: "95% Reliable",
+                    lat: 9.9816 + (Math.random() - 0.5) * 0.03,
+                    lng: 76.2998 + (Math.random() - 0.5) * 0.03,
+                    status: status,
+                    updated: "Just now",
+                    reviews: []
+                };
+                facilities.push(targetFacility);
+            }
+
+            targetFacility.status = status;
+            targetFacility.updated = "Just now";
+            if (reviewText || uploadedImageBase64) {
+                targetFacility.reviews.unshift({ rating: starRating, text: reviewText || "Reported update", img: uploadedImageBase64 });
+            }
+
+            renderMarkers(facilities);
+
+            // Generates a ticket and routes a simulated issue to the responsible local body[cite: 1]
+            userTickets.unshift({ id: ticketId, facility: locationName, status: status, route: "Routed to Ward 4 Municipal Officer" });
+            renderTickets();
+
+            document.getElementById('reportSuccess').innerText = `Ticket #${ticketId} generated & routed successfully to local body[cite: 1]!`;
+            setTimeout(() => document.getElementById('reportSuccess').innerText = '', 5000);
+            
+            uploadedImageBase64 = '';
+            document.getElementById('imageFileName').innerText = '';
+            e.target.reset();
+        }
+
+        function renderTickets() {
+            const container = document.getElementById('ticketTrackerList');
+            if (userTickets.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 italic text-center py-2 text-xs">No reports sent yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = userTickets.map(t => `
+                <div class="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1 shadow-sm">
+                    <div class="flex justify-between font-black text-xs">
+                        <span class="text-teal-600 dark:text-teal-400">Ticket #${t.id}[cite: 1]</span>
+                        <span class="text-emerald-600 font-bold">${t.status}</span>
+                    </div>
+                    <p class="text-slate-700 dark:text-slate-200 font-semibold text-xs">${t.facility}</p>
+                    <p class="text-[10px] text-emerald-600 font-bold">✓ Simulated issue routed to local body[cite: 1]: ${t.route}</p>
+                </div>
+            `).join('');
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function toggleProfileModal(show) {
+            const modal = document.getElementById('profileModal');
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+    </script>
+</body>
+</html>
