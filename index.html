@@ -94,7 +94,7 @@
         <!-- Top Navigation Bar -->
         <header class="h-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl shadow-sm px-4 md:px-8 flex items-center justify-between z-50 border-b border-slate-200/60 dark:border-slate-800/60 flex-shrink-0">
             <div class="flex items-center space-x-3.5">
-                <button onclick="goBackToWelcome()" class="px-3.5 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm">
+                <button type="button" onclick="goBackToWelcome()" class="px-3.5 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm">
                     ← Back
                 </button>
                 <div>
@@ -118,9 +118,9 @@
                     <option value="ta">தமிழ்</option>
                 </select>
 
-                <button onclick="toggleDarkMode()" class="px-3.5 py-2 rounded-full bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-xs font-bold hover:scale-105 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">Theme</button>
+                <button type="button" onclick="toggleDarkMode()" class="px-3.5 py-2 rounded-full bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-xs font-bold hover:scale-105 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">Theme</button>
                 
-                <button onclick="toggleProfileModal(true)" class="group flex items-center space-x-2 bg-gradient-to-r from-teal-500/15 to-blue-500/15 hover:from-teal-500/25 hover:to-blue-500/25 px-4 py-2 rounded-full border border-teal-500/30 transition-all shadow-glow hover:scale-105 active:scale-95">
+                <button type="button" onclick="toggleProfileModal(true)" class="group flex items-center space-x-2 bg-gradient-to-r from-teal-500/15 to-blue-500/15 hover:from-teal-500/25 hover:to-blue-500/25 px-4 py-2 rounded-full border border-teal-500/30 transition-all shadow-glow hover:scale-105 active:scale-95">
                     <div class="relative">
                         <div class="w-7 h-7 bg-gradient-to-tr from-teal-500 to-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-md">SS</div>
                         <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full animate-pulse"></div>
@@ -137,10 +137,10 @@
                 
                 <!-- Action Grid -->
                 <div class="grid grid-cols-2 gap-2.5">
-                    <button onclick="panToUserLocation()" class="py-3.5 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 text-white text-xs font-black rounded-2xl shadow-lg shadow-teal-500/25 transition-all transform hover:scale-[1.02]">
+                    <button type="button" onclick="panToUserLocation()" class="py-3.5 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 text-white text-xs font-black rounded-2xl shadow-lg shadow-teal-500/25 transition-all transform hover:scale-[1.02]">
                         Near Me GPS
                     </button>
-                    <button onclick="triggerEmergencySOS()" class="py-3.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 text-white text-xs font-black rounded-2xl shadow-lg shadow-rose-500/25 transition-all transform hover:scale-[1.02]">
+                    <button type="button" onclick="triggerEmergencySOS()" class="py-3.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 text-white text-xs font-black rounded-2xl shadow-lg shadow-rose-500/25 transition-all transform hover:scale-[1.02]">
                         Emergency SOS
                     </button>
                 </div>
@@ -149,19 +149,19 @@
                 <div class="bg-slate-50/80 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h2 class="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-3" id="filtersTitle">Find Fast</h2>
                     <div class="grid grid-cols-2 gap-2" id="filterButtonsContainer">
-                        <button onclick="setActiveFilter('all', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-teal-600 text-white shadow-md shadow-teal-500/30 transition-all flex items-center justify-center space-x-1.5" id="filterAll">
+                        <button type="button" onclick="setActiveFilter('all', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-teal-600 text-white shadow-md shadow-teal-500/30 transition-all flex items-center justify-center space-x-1.5" id="filterAll">
                             <span>All Services</span>
                         </button>
-                        <button onclick="setActiveFilter('toilet', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterToilet">
+                        <button type="button" onclick="setActiveFilter('toilet', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterToilet">
                             <span>Toilets</span>
                         </button>
-                        <button onclick="setActiveFilter('water', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterWater">
+                        <button type="button" onclick="setActiveFilter('water', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterWater">
                             <span>Water Points</span>
                         </button>
-                        <button onclick="setActiveFilter('free', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterFree">
+                        <button type="button" onclick="setActiveFilter('free', this)" class="filter-btn py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterFree">
                             <span>Free Only</span>
                         </button>
-                        <button onclick="setActiveFilter('accessible', this)" class="filter-btn col-span-2 py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterAccessible">
+                        <button type="button" onclick="setActiveFilter('accessible', this)" class="filter-btn col-span-2 py-3 px-4 rounded-2xl text-xs font-extrabold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-teal-500 transition-all flex items-center justify-center space-x-1.5 shadow-sm" id="filterAccessible">
                             <span>Wheelchair Accessible</span>
                         </button>
                     </div>
@@ -227,7 +227,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-4xl shadow-2xl w-full max-w-lg p-6 md:p-8 border border-slate-200 dark:border-slate-800 space-y-5">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <h2 class="text-lg md:text-xl font-black tracking-tight" id="profileModalTitle">My Profile & Credentials</h2>
-                <button onclick="toggleProfileModal(false)" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold">✕</button>
+                <button type="button" onclick="toggleProfileModal(false)" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold">✕</button>
             </div>
 
             <div class="flex items-center space-x-4 p-4 rounded-3xl bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-950/40 dark:to-teal-950/40 border border-blue-100 dark:border-teal-900/60 shadow-sm">
@@ -243,7 +243,7 @@
                 <p><strong>Privacy Note:</strong> Your personal identity and location histories are securely encrypted and never disclosed publicly in accordance with strict municipal privacy guidelines.</p>
                 <p><strong>Support Helpline:</strong> Contact Urban Sanitation & Water Cell at 1800-SANESTOP.</p>
             </div>
-            <button onclick="handleLogout()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all">Logout / Switch User</button>
+            <button type="button" onclick="handleLogout()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all">Logout / Switch User</button>
         </div>
     </div>
 
